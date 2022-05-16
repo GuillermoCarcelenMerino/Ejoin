@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "824373445398",
+    "project_id": "ejoin-8bb1f",
+    "storage_bucket": "ejoin-8bb1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824373445398:android:2c4b20569cfc5f51308637",
+        "android_client_info": {
+          "package_name": "app.Ejoin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824373445398-b662s2thu7jl2dfvj8oic057j9nta104.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXW3M4WM85WH7F4G5zzngaL153JTXna2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824373445398-b662s2thu7jl2dfvj8oic057j9nta104.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
