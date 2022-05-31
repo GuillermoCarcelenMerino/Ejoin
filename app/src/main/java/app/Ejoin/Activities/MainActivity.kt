@@ -7,10 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import app.Ejoin.Adapter.RecyclerEventos
-import app.Ejoin.DataClasses.Categoria
 import app.Ejoin.DataClasses.Evento
 import app.Ejoin.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -41,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     //gestion de fragmentos
     val FM: FragmentManager = supportFragmentManager
-    lateinit var fragmentMapa: MapFragment
+    lateinit var  googleMapFragment : GoogleMapFragment
     lateinit var fragmentEvento: EventFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -144,16 +140,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initControlFragments() {
-        fragmentMapa = MapFragment.newInstance(eventos as ArrayList<Evento>)
+         googleMapFragment = GoogleMapFragment.newInstance(eventos as ArrayList<Evento>)
         fragmentEvento= EventFragment.newInstance(eventos as ArrayList<Evento>)
         val FT: FragmentTransaction = FM.beginTransaction()
-        FT.add(R.id.fragment, fragmentEvento)
+        FT.add(R.id.fragment, googleMapFragment)
         FT.commit()
 
         findViewById<Button>(R.id.botonMapa).setOnClickListener{
 
             val FT: FragmentTransaction = FM.beginTransaction()
-            FT.replace(R.id.fragment,fragmentMapa)
+            FT.replace(R.id.fragment,googleMapFragment)
             FT.commit()
 
         }
