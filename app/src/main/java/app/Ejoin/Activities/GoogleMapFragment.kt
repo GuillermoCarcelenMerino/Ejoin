@@ -28,7 +28,7 @@ import java.util.function.Consumer
 
 class GoogleMapFragment : Fragment(), GoogleMap.OnInfoWindowClickListener {
     private lateinit var eventos: ArrayList<Evento>
-
+private lateinit var mapa : GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +36,7 @@ class GoogleMapFragment : Fragment(), GoogleMap.OnInfoWindowClickListener {
 
     @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { googleMap ->
+        mapa = googleMap
         /**
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
@@ -154,6 +155,13 @@ class GoogleMapFragment : Fragment(), GoogleMap.OnInfoWindowClickListener {
             putExtra(Constants.MAXUSUARIOS,evento.getMaxUsuarios())
             putExtra(Constants.USUARIOS,evento.getusuarios())
             putExtra(Constants.USERPHOTO,evento.getPhoto())
+        })
+    }
+
+     fun filtrarMapa( eventos : ArrayList<Evento>){
+        mapa?.clear()
+        eventos.forEach(Consumer { x->
+            generarMarker( x,mapa)
         })
     }
 

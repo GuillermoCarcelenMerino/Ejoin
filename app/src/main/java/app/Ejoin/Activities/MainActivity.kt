@@ -7,7 +7,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import app.Ejoin.Adapter.RecyclerEventos
+import app.Ejoin.Adapter.RecyclerFiltro
 import app.Ejoin.DataClasses.Evento
+import app.Ejoin.DataClasses.Filtros
 import app.Ejoin.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -40,6 +45,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var  googleMapFragment : GoogleMapFragment
     lateinit var fragmentEvento: EventFragment
 
+    //filtros
+    private lateinit var adapter : RecyclerFiltro
+    private lateinit var recyclerView : RecyclerView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         initNavView()
         initActionBar()
         cargarEventos()
+
 
 
     }
@@ -160,22 +171,115 @@ class MainActivity : AppCompatActivity() {
             FT.commit()
 
         }
-    }
 
 
-   /* private fun añadirEvento() {
-        var evento : Evento
-        var users : ArrayList<String> = arrayListOf("pepe@gmail.com","paco@gmail.com")
-        evento = Evento("Partido de futbol","guillermo@gmail.com","12/2",Categoria.DEPORTES.toString(),"partido 7 v 7",2.2,"Madrid",
-            GeoPoint(32.0,20.0),3,users
-        )
-        db.collection(Constants.EVENTOSDB).add(evento).addOnSuccessListener {
-            Toast.makeText(this,"añadido correctanebte",Toast.LENGTH_LONG).show()
-        }.addOnFailureListener{
-                Toast.makeText(this,"Error",Toast.LENGTH_LONG).show()
+         recyclerView =findViewById(R.id.recyclerFiltros)
+
+        findViewById<Button>(R.id.filtros).setOnClickListener{
+          startActivityForResult(Intent(this,FilterActivity::class.java),1)
+
 
         }
 
-    }*/
+        
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        var eventosFilt : MutableList<Evento> = mutableListOf()
+        var filtro = Filtros()
+        filtro.deportesFilt= data?.extras?.get("deportes") as Boolean
+        filtro.ocioFilt= data?.extras?.get("ocio") as Boolean
+        filtro.musicaFilt= data?.extras?.get("musica") as Boolean
+        filtro.estudiosFilt= data?.extras?.get("estudios") as Boolean
+        filtro.disponibleFilt= data?.extras?.get("disponibles") as Boolean
+        filtro.diaCambio= data?.extras?.get("diaCambio") as Boolean
+
+        if(data?.extras?.get("precioCambio") as Boolean){
+            filtro.precioFilt= true
+            filtro.valorMaxPrecio=data?.extras?.get("precio") as Float
+        }
+        if(filtro.diaCambio){
+            filtro.dia= data?.extras?.get("dia") as Int
+            filtro.mes= data?.extras?.get("mes") as Int
+        }
+
+        crearRecyclerFiltros(filtro)
+
+        eventos.forEach {x->
+            var añadir = true
+
+                if(filtro.deportesFilt && x.getCategoria()!="DEPORTES")
+                    añadir = false
+
+                if(filtro.ocioFilt && x.getCategoria()!="OCIO")
+                 añadir = false
+            if( filtro.estudiosFilt && x.getCategoria()!="ESTUDIO")
+                    añadir = false
+            if( filtro.musicaFilt && x.getCategoria()!="MUSICA")
+                añadir = false
+            if(  filtro.disponibleFilt && x.getusuarios().size>=x.getMaxUsuarios().toInt())
+             añadir = false
+            if(  filtro.precioFilt && x.getPrecio().toFloat()>filtro.valorMaxPrecio)
+                añadir = false
+            if(filtro.diaCambio && x.getFecha()!= (filtro.dia.toString() + "/"+filtro.mes.toString()))
+                añadir = false
+
+            if (añadir)
+                eventosFilt.add(x)
+        }
+        if(FM.fragments[0] is GoogleMapFragment)
+            (FM.fragments[0] as GoogleMapFragment).filtrarMapa(eventosFilt as ArrayList<Evento>)
+        else {
+            (FM.fragments[0] as EventFragment).filtrarMapa(eventosFilt as ArrayList<Evento>)
+        }
+
+    }
+
+    private fun crearRecyclerFiltros(filtro: Filtros) {
+        var filtros : MutableList<String> = mutableListOf()
+
+        if(filtro.deportesFilt )
+            filtros.add("deportes")
+        if(filtro.ocioFilt )
+            filtros.add("ocio")
+
+        if(filtro.estudiosFilt)
+            filtros.add("estudio")
+
+
+        if( filtro.musicaFilt)
+            filtros.add("musica")
+
+        if(  filtro.disponibleFilt )
+            filtros.add("disponibles")
+
+        if(  filtro.precioFilt )
+            filtros.add("precio")
+
+        if(filtro.diaCambio )
+            filtros.add("dia")
+
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        adapter = RecyclerFiltro(filtros as ArrayList<String> )
+        recyclerView.adapter = adapter
+
+
+    }
+
+    /* private fun añadirEvento() {
+         var evento : Evento
+         var users : ArrayList<String> = arrayListOf("pepe@gmail.com","paco@gmail.com")
+         evento = Evento("Partido de futbol","guillermo@gmail.com","12/2",Categoria.DEPORTES.toString(),"partido 7 v 7",2.2,"Madrid",
+             GeoPoint(32.0,20.0),3,users
+         )
+         db.collection(Constants.EVENTOSDB).add(evento).addOnSuccessListener {
+             Toast.makeText(this,"añadido correctanebte",Toast.LENGTH_LONG).show()
+         }.addOnFailureListener{
+                 Toast.makeText(this,"Error",Toast.LENGTH_LONG).show()
+
+         }
+
+     }*/
 
 }
