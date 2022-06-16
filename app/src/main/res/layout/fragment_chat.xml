@@ -3,45 +3,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activities.ChatFragment">
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="#123">
-            <Button
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/chat"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentTop="true"/>
+
             <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/imagenUsuarioFin"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@color/white"
+                android:layout_marginLeft="30dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="30dp"/>
+                android:background="@color/white" />
+
             <TextView
+                android:id="@+id/nombreUsuarioFin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
-                android:text="fdasfa"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:text="fdasfa" />
 
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerChat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#123">
+
+        <EditText
+            android:id="@+id/textMessage"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:hint="message"/>
+
+        <Button
+            android:id="@+id/sendMessage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/sendmessage"
+            app:backgroundTint="@color/white"/>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </FrameLayout>

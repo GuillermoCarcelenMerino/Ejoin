@@ -5,28 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:orientation="vertical"
-            android:background="#43A5">
+
             <TextView
-                android:id="@+id/nombreReceptor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="NOmbre de emisor"
-                android:paddingLeft="10dp"
-                android:textStyle="bold"/>
-            <TextView
+                android:background="#43A5"
                 android:id="@+id/mensajeReceptor"
                 android:layout_width="300dp"
                 android:layout_height="30dp"
                 android:text="COLOR negro De letra"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"/>
-        </LinearLayout>
+                android:paddingLeft="10dp"
+                android:layout_marginTop="10dp"
+
+                />
 
             <TextView
                 android:id="@+id/mensajeEmisor"
@@ -37,7 +27,8 @@
                 android:paddingLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:background="#546A"
-                android:layout_gravity="end"/>
+                android:layout_gravity="end"
+                />
 
 
     </LinearLayout>

@@ -162,13 +162,19 @@ class MainActivity : AppCompatActivity() {
             val FT: FragmentTransaction = FM.beginTransaction()
             FT.replace(R.id.fragment,googleMapFragment)
             FT.commit()
-
+            recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            adapter = RecyclerFiltro( ArrayList<String>())
+            recyclerView.adapter = adapter
         }
         findViewById<Button>(R.id.botonEvento).setOnClickListener{
 
             val FT: FragmentTransaction = FM.beginTransaction()
             FT.replace(R.id.fragment,fragmentEvento)
             FT.commit()
+
+            recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            adapter = RecyclerFiltro( ArrayList<String>())
+            recyclerView.adapter = adapter
 
         }
 

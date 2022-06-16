@@ -1,16 +1,13 @@
 package app.Ejoin.Activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.RecyclerView
-import app.Ejoin.Adapter.RecyclerUsuarios
-import app.Ejoin.DataClasses.Evento
+import app.Ejoin.DataClasses.Chat
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import utilities.Constants
@@ -21,8 +18,6 @@ class ChatActivity : AppCompatActivity() {
     //gestion de fragmentos
     val FM: FragmentManager = supportFragmentManager
     lateinit var fragmentLista: ChatListfragment
-    lateinit var fragmentChat: ChatFragment
-
     private lateinit var userPreferences : PreferencesManager
     private lateinit var user : Usuarios
 
@@ -30,7 +25,7 @@ class ChatActivity : AppCompatActivity() {
     private val db = Firebase.firestore
     var usuarios : MutableList<Usuarios> = mutableListOf()
     private  lateinit var  usuario : Usuarios
-
+    private  lateinit var userReference : DocumentReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +47,7 @@ class ChatActivity : AppCompatActivity() {
 
 
     private fun cargarRecycler() {
+
         db.collection(Constants.USERBD).get()
             .addOnSuccessListener {
 
@@ -67,13 +63,19 @@ class ChatActivity : AppCompatActivity() {
                         usuarios.add(usuario)
                     }
                     else {
-                        this.usuario.setChats(it.get("chats") as ArrayList<String>)
+                        userReference=it.reference
                     }
 
 
                 }
 
-               initControlFragments()
+                userReference.collection("chats").get().addOnSuccessListener {
+                    var chats = it.toObjects(Chat::class.java)
+                    usuario.setChats(chats as ArrayList<Chat>)
+                    initControlFragments()
+                }
+
+
 
             }
             .addOnFailureListener {
@@ -81,8 +83,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun initControlFragments() {
-        //fragmentChat = ChatFragment().newInstance(eventos as ArrayList<Evento>)
-        fragmentLista= ChatListfragment.newInstance(usuarios as ArrayList<Usuarios>,usuario)
+        fragmentLista= ChatListfragment.newInstance(usuarios as ArrayList<Usuarios>,usuario, userReference)
         val FT: FragmentTransaction = FM.beginTransaction()
         FT.add(R.id.fragment, fragmentLista)
         FT.commit()
@@ -100,6 +101,19 @@ class ChatActivity : AppCompatActivity() {
             FT.commit()
 
         }*/
+    }
+
+    override fun onBackPressed() {
+
+
+        if(FM.fragments[0] is ChatFragment)
+        {
+            val FT: FragmentTransaction = FM.beginTransaction()
+            FT.replace(R.id.fragment, fragmentLista)
+            FT.commit()
+        }
+        else super.onBackPressed()
+
     }
 
 }

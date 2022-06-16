@@ -11,7 +11,7 @@ class Usuarios {
     private lateinit var photo : String
     private lateinit var name : String
     private var esEmpresa : Boolean = false
-    private lateinit var chats : ArrayList<String>
+    private  var chats : ArrayList<Chat> = arrayListOf()
 
     constructor()
     constructor(
@@ -75,10 +75,13 @@ class Usuarios {
     fun setEsEmpresa(boolean :  Boolean) {
         esEmpresa  = boolean
     }
-    fun setChats(chats :  ArrayList<String>) {
+    fun setChats(chats :  ArrayList<Chat>) {
         this.chats  = chats
-    }fun getChats(): ArrayList<String>{
-        return  chats
+    }
+    fun getChats(): ArrayList<Chat>{
+        if(chats==null)
+            return arrayListOf()
+        else return  chats
     }
 
     }

@@ -1,19 +1,14 @@
 package app.Ejoin.Adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.Ejoin.Activities.ChatListfragment
-import app.Ejoin.Activities.DatosEventos
-import app.Ejoin.DataClasses.Evento
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
 import com.mikhaellopez.circularimageview.CircularImageView
-import utilities.Constants
 
 class RecyclerChatLista (private val dataSet: ArrayList<Usuarios>,private val fragment : ChatListfragment) :
     RecyclerView.Adapter<RecyclerChatLista.ViewHolder>() {
@@ -55,7 +50,7 @@ class RecyclerChatLista (private val dataSet: ArrayList<Usuarios>,private val fr
             imagenChat = view.findViewById(R.id.fotoChat)
             nombreChat = view.findViewById(R.id.nombreChat)
             view.setOnClickListener {
-                fragment.replaceFragment()
+                fragment.replaceFragment(usuarioIr)
 
 
             }

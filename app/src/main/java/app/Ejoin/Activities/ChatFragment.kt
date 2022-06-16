@@ -1,33 +1,55 @@
 package app.Ejoin.Activities
 
+import android.app.DownloadManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import app.Ejoin.Adapter.RecyclerChat
+import app.Ejoin.DataClasses.Chat
+import app.Ejoin.DataClasses.Message
+import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.mikhaellopez.circularimageview.CircularImageView
+import utilities.Constants
+import java.util.*
+import kotlin.collections.ArrayList
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ChatFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ChatFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var usuarioOrigen: Usuarios
+    private lateinit var usuarioFin: Usuarios
+    private lateinit var editMessage : EditText
+    private lateinit var sendMessage: Button
+    private lateinit var nombreUsuarioFin: TextView
+    private lateinit var photoUsuarioFin : CircularImageView
+    private var newChat : Boolean = true
+
+    private lateinit var adapter : RecyclerChat
+    private lateinit var recyclerView : RecyclerView
+
+    private  var mensajes : MutableList<Message> = mutableListOf()
+    private val db = Firebase.firestore
+
+    private lateinit var chat : Chat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
+        chat = Chat()
+        chat.users= listOf( usuarioOrigen.getEmail(),usuarioFin.getEmail())
     }
 
     override fun onCreateView(
@@ -35,26 +57,168 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        var V=inflater.inflate(R.layout.fragment_chat, container, false)
+        this.editMessage = V.findViewById(R.id.textMessage)
+        this.sendMessage=V.findViewById(R.id.sendMessage)
+        this.recyclerView = V.findViewById(R.id.recyclerChat)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        this.nombreUsuarioFin = V.findViewById(R.id.nombreUsuarioFin)
+        this.nombreUsuarioFin.text=usuarioFin.getName()
+        this.photoUsuarioFin=V.findViewById(R.id.imagenUsuarioFin)
+        photoUsuarioFin.setImageBitmap(usuarioFin.photoBitmap())
+        sendMessage.setOnClickListener { x->sendMessageChat() }
+
+        comprobarNewChat()
+
+        if(!newChat)
+            cargarMensages()
+        return V
+    }
+
+    private fun comprobarNewChat() {
+        newChat = true
+        for(chat in this.usuarioOrigen.getChats())
+            if(chat.users.size == 2 && chat.users.contains(usuarioOrigen.getEmail()) && chat.users.contains(usuarioFin.getEmail())) {
+                newChat = false
+                this.chat=chat
+            }
+
+    }
+
+    private fun sendMessageChat() {
+        if(newChat){
+
+            createNewChat()
+        }
+        else addMesage()
+    }
+
+    private fun addMesage() {
+        var message = Message()
+        message.from=usuarioOrigen.getEmail()
+        message.to = usuarioFin.getEmail()
+        message.message=this.editMessage.text.toString()
+        message.time=Timestamp.now()
+        db.collection(Constants.CHATS).document(chat.id).collection("messages")
+            .add(message).addOnFailureListener {
+                Toast.makeText(activity,"Mensaje no pudo enviarse",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+
+    private fun createNewChat() {
+
+
+
+        db.collection(Constants.CHATS).add(chat).addOnSuccessListener {
+            chat.id=it.id
+            it.update("id",it.id)
+
+
+            //update chats from userOrigin
+            db.collection(Constants.USERBD).whereEqualTo(Constants.EMAIL,usuarioOrigen.getEmail()).get().addOnSuccessListener {
+                it.documents.get(0)
+                    .reference
+                    .collection("chats")
+                    .add(chat)
+                    .addOnFailureListener {
+                        Toast.makeText(activity,"Mensaje no pudo enviarse",Toast.LENGTH_SHORT).show()
+                    }
+            }
+
+            //update chats from userFin
+            db.collection(Constants.USERBD).whereEqualTo(Constants.EMAIL,usuarioFin.getEmail()).get().addOnSuccessListener {
+                it.documents.get(0)
+                    .reference
+                    .collection("chats")
+                    .add(chat)
+                    .addOnFailureListener {
+                        Toast.makeText(activity,"Mensaje no pudo enviarse",Toast.LENGTH_SHORT).show()
+                    }
+            }
+
+            var message = Message()
+            message.from=usuarioOrigen.getEmail()
+            message.to = usuarioFin.getEmail()
+            message.message=this.editMessage.text.toString()
+            message.time = Timestamp.now()
+            db.collection(Constants.CHATS).document(chat.id).collection("messages").add(message).addOnFailureListener {
+                Toast.makeText(activity,"Chat no pudo crearse",Toast.LENGTH_SHORT).show()
+            }
+
+            db.collection(Constants.CHATS)
+                .document(chat.id)
+                .collection("messages").orderBy("time", Query.Direction.ASCENDING)
+                .addSnapshotListener{messages,error->
+                    if (error==null)
+                    {
+                        messages?.let{
+                            mensajes = it.toObjects(Message::class.java)
+                            adapter = RecyclerChat(mensajes as ArrayList<Message> ,usuarioOrigen)
+                            recyclerView.adapter = adapter
+                        }
+                    }
+                }
+
+
+
+        }
+
+
+        newChat=false
+    }
+
+    private fun cargarMensages() {
+
+
+        db.collection(Constants.CHATS)
+            .document(chat.id)
+            .collection("messages").get()
+                    .addOnSuccessListener {
+                        for (doc in it.documents) {
+                            var messageDb = Message()
+                            messageDb.message = doc.get("message") as String
+                            messageDb.from = doc.get("from") as String
+                            messageDb.to = doc.get("to") as String
+                            messageDb.time = doc.get("time") as Timestamp
+                            mensajes.add(messageDb)
+                        }
+                        cargarRecycler()
+
+                        db.collection(Constants.CHATS)
+                            .document(chat.id)
+                            .collection("messages").orderBy("time", Query.Direction.ASCENDING)
+                            .addSnapshotListener{messages,error->
+                                if (error==null)
+                                {
+                                    messages?.let{
+                                        mensajes = it.toObjects(Message::class.java)
+                                        adapter = RecyclerChat(mensajes as ArrayList<Message> ,usuarioOrigen)
+                                        recyclerView.adapter = adapter
+                                    }
+                                }
+                            }
+
+
+            }
+    }
+
+    private fun cargarRecycler() {
+        adapter = RecyclerChat(mensajes as ArrayList<Message> ,usuarioOrigen)
+        recyclerView.adapter = adapter
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ChatFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(usuarioOrigen: Usuarios, usuarioFin: Usuarios) =
             ChatFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+                this.usuarioOrigen=usuarioOrigen
+                this.usuarioFin=usuarioFin
             }
     }
+
+
+
 }
