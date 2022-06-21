@@ -6,6 +6,5 @@ import java.util.*
 data class Message(
     var message: String = "",
     var from: String = "",
-    var to: String="",
     var time: Timestamp? =null
 )

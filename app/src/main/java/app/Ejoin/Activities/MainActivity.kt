@@ -2,7 +2,9 @@ package app.Ejoin.Activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -15,6 +17,8 @@ import app.Ejoin.DataClasses.Evento
 import app.Ejoin.DataClasses.Filtros
 import app.Ejoin.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -49,6 +53,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter : RecyclerFiltro
     private lateinit var recyclerView : RecyclerView
 
+    //new Event
+    private lateinit var addEvent : ExtendedFloatingActionButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +65,14 @@ class MainActivity : AppCompatActivity() {
         initNavView()
         initActionBar()
         cargarEventos()
-
-
+        userPreferences = PreferencesManager(this)
+           if(userPreferences.getBoolean(Constants.ESEMPRESA)) {
+            addEvent = findViewById(R.id.addEvent)
+            addEvent.visibility= View.VISIBLE
+            addEvent.setOnClickListener {
+                añadirEvento()
+            }
+        }
 
     }
     
@@ -67,7 +80,6 @@ class MainActivity : AppCompatActivity() {
     * TODO Terminar navegador y añadir el swip down
     *  */
     private fun initActionBar() {
-
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.home -> {
@@ -109,7 +121,11 @@ class MainActivity : AppCompatActivity() {
                     userPreferences.putString(Constants.EMAIL,"")
                     userPreferences.putBoolean(Constants.LOGEADO,false)
                     userPreferences.putString(Constants.USERID,"")
-                    userPreferences.putString(Constants.USERPHOTO,"")
+                    userPreferences.putString(Constants.USERPHOTO,"" )
+                    userPreferences.putString(Constants.NOMBREUSUARIO ,"")
+                    userPreferences.putBoolean(Constants.ESEMPRESA,false)
+
+
                     startActivity(Intent(this,LoginActivity::class.java))
                     //TODO limpiar historial de activities para que no pueda voler
                 }
@@ -154,7 +170,7 @@ class MainActivity : AppCompatActivity() {
          googleMapFragment = GoogleMapFragment.newInstance(eventos as ArrayList<Evento>)
         fragmentEvento= EventFragment.newInstance(eventos as ArrayList<Evento>)
         val FT: FragmentTransaction = FM.beginTransaction()
-        FT.add(R.id.fragment, googleMapFragment)
+        FT.add(R.id.fragment, fragmentEvento)
         FT.commit()
 
         findViewById<Button>(R.id.botonMapa).setOnClickListener{
@@ -273,19 +289,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /* private fun añadirEvento() {
-         var evento : Evento
-         var users : ArrayList<String> = arrayListOf("pepe@gmail.com","paco@gmail.com")
-         evento = Evento("Partido de futbol","guillermo@gmail.com","12/2",Categoria.DEPORTES.toString(),"partido 7 v 7",2.2,"Madrid",
-             GeoPoint(32.0,20.0),3,users
+     private fun añadirEvento() {
+         startActivity(Intent(this,AddEvent::class.java)
+             .apply {
+                 putExtra(Constants.EMAIL,userPreferences.getString(Constants.EMAIL))
+             }
          )
-         db.collection(Constants.EVENTOSDB).add(evento).addOnSuccessListener {
-             Toast.makeText(this,"añadido correctanebte",Toast.LENGTH_LONG).show()
-         }.addOnFailureListener{
-                 Toast.makeText(this,"Error",Toast.LENGTH_LONG).show()
-
-         }
-
-     }*/
+     }
 
 }

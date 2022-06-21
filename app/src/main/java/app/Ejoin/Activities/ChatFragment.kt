@@ -1,7 +1,9 @@
 package app.Ejoin.Activities
 
 import android.app.DownloadManager
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +30,7 @@ import kotlin.collections.ArrayList
 
 
 class ChatFragment : Fragment() {
-
+    private  var chatFin: Chat? = null
     private lateinit var usuarioOrigen: Usuarios
     private lateinit var usuarioFin: Usuarios
     private lateinit var editMessage : EditText
@@ -49,7 +51,7 @@ class ChatFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         chat = Chat()
-        chat.users= listOf( usuarioOrigen.getEmail(),usuarioFin.getEmail())
+
     }
 
     override fun onCreateView(
@@ -63,15 +65,37 @@ class ChatFragment : Fragment() {
         this.recyclerView = V.findViewById(R.id.recyclerChat)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         this.nombreUsuarioFin = V.findViewById(R.id.nombreUsuarioFin)
-        this.nombreUsuarioFin.text=usuarioFin.getName()
         this.photoUsuarioFin=V.findViewById(R.id.imagenUsuarioFin)
-        photoUsuarioFin.setImageBitmap(usuarioFin.photoBitmap())
-        sendMessage.setOnClickListener { x->sendMessageChat() }
 
-        comprobarNewChat()
+        //chat grupo
+        if(chatFin!=null)
+        {
 
-        if(!newChat)
-            cargarMensages()
+            newChat=false
+            cargarMensages(chatFin!!)
+            this.nombreUsuarioFin.text= chatFin!!.id
+            val imageBytes = Base64.decode(chatFin!!.photo, 0)
+            val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            photoUsuarioFin.setImageBitmap(bitmap)
+            sendMessage.setOnClickListener { x->sendMessageChat() }
+        }
+        //chat individual
+
+        else
+        {
+            chat.users= listOf( usuarioOrigen.getEmail(),usuarioFin.getEmail())
+            this.nombreUsuarioFin.text=usuarioFin.getName()
+            photoUsuarioFin.setImageBitmap(usuarioFin.photoBitmap())
+            sendMessage.setOnClickListener { x->sendMessageChat() }
+
+            comprobarNewChat()
+
+            if(!newChat)
+                cargarMensages()
+
+
+        }
+
         return V
     }
 
@@ -96,13 +120,21 @@ class ChatFragment : Fragment() {
     private fun addMesage() {
         var message = Message()
         message.from=usuarioOrigen.getEmail()
-        message.to = usuarioFin.getEmail()
         message.message=this.editMessage.text.toString()
         message.time=Timestamp.now()
-        db.collection(Constants.CHATS).document(chat.id).collection("messages")
-            .add(message).addOnFailureListener {
-                Toast.makeText(activity,"Mensaje no pudo enviarse",Toast.LENGTH_SHORT).show()
-            }
+        if(chatFin==null) {
+            db.collection(Constants.CHATS).document(chat.id).collection("messages")
+                .add(message).addOnFailureListener {
+                    Toast.makeText(activity, "Mensaje no pudo enviarse", Toast.LENGTH_SHORT).show()
+                }
+        }
+        else{
+            db.collection(Constants.CHATS).document(chatFin!!.id).collection("messages")
+                .add(message).addOnFailureListener {
+                    Toast.makeText(activity, "Mensaje no pudo enviarse", Toast.LENGTH_SHORT).show()
+                }
+
+        }
         }
 
 
@@ -140,7 +172,6 @@ class ChatFragment : Fragment() {
 
             var message = Message()
             message.from=usuarioOrigen.getEmail()
-            message.to = usuarioFin.getEmail()
             message.message=this.editMessage.text.toString()
             message.time = Timestamp.now()
             db.collection(Constants.CHATS).document(chat.id).collection("messages").add(message).addOnFailureListener {
@@ -180,7 +211,6 @@ class ChatFragment : Fragment() {
                             var messageDb = Message()
                             messageDb.message = doc.get("message") as String
                             messageDb.from = doc.get("from") as String
-                            messageDb.to = doc.get("to") as String
                             messageDb.time = doc.get("time") as Timestamp
                             mensajes.add(messageDb)
                         }
@@ -204,6 +234,40 @@ class ChatFragment : Fragment() {
             }
     }
 
+    private fun cargarMensages(chat : Chat) {
+
+
+        db.collection(Constants.CHATS)
+            .document(chat.id)
+            .collection("messages").get()
+            .addOnSuccessListener {
+                for (doc in it.documents) {
+                    var messageDb = Message()
+                    messageDb.message = doc.get("message") as String
+                    messageDb.from = doc.get("from") as String
+                    messageDb.time = doc.get("time") as Timestamp
+                    mensajes.add(messageDb)
+                }
+                cargarRecycler()
+
+                db.collection(Constants.CHATS)
+                    .document(chat.id)
+                    .collection("messages").orderBy("time", Query.Direction.ASCENDING)
+                    .addSnapshotListener{messages,error->
+                        if (error==null)
+                        {
+                            messages?.let{
+                                mensajes = it.toObjects(Message::class.java)
+                                adapter = RecyclerChat(mensajes as ArrayList<Message> ,usuarioOrigen)
+                                recyclerView.adapter = adapter
+                            }
+                        }
+                    }
+
+
+            }
+    }
+
     private fun cargarRecycler() {
         adapter = RecyclerChat(mensajes as ArrayList<Message> ,usuarioOrigen)
         recyclerView.adapter = adapter
@@ -216,6 +280,12 @@ class ChatFragment : Fragment() {
             ChatFragment().apply {
                 this.usuarioOrigen=usuarioOrigen
                 this.usuarioFin=usuarioFin
+            }
+        @JvmStatic
+        fun newInstance(usuarioOrigen: Usuarios, chat: Chat) =
+            ChatFragment().apply {
+                this.usuarioOrigen=usuarioOrigen
+                this.chatFin=chat
             }
     }
 

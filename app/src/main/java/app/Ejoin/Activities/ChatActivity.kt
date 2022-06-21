@@ -1,5 +1,6 @@
 package app.Ejoin.Activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
@@ -7,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction
 import app.Ejoin.DataClasses.Chat
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,6 +32,9 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+
+
+
         userPreferences = PreferencesManager(this)
 
             usuario= Usuarios(
@@ -83,12 +88,34 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun initControlFragments() {
-        fragmentLista= ChatListfragment.newInstance(usuarios as ArrayList<Usuarios>,usuario, userReference)
-        val FT: FragmentTransaction = FM.beginTransaction()
-        FT.add(R.id.fragment, fragmentLista)
-        FT.commit()
+        var datosUsuario=intent.extras
+        if(datosUsuario!=null)
+        {
+            var usuarioIr : Usuarios = Usuarios()
+            var emailUsuario = datosUsuario.get(Constants.EMAIL)
+            for(usuario in usuarios){
+                if(usuario.getEmail()==emailUsuario)
+                    usuarioIr = usuario
+            }
 
-        /*9
+            var fragmentChat = ChatFragment.newInstance(usuario,usuarioIr)
+            val FT: FragmentTransaction = FM.beginTransaction()
+            FT.replace(R.id.fragment, fragmentChat)
+            FT.commit()
+
+        }
+
+        else {
+            fragmentLista = ChatListfragment.newInstance(
+                usuarios as ArrayList<Usuarios>,
+                usuario,
+                userReference
+            )
+            val FT: FragmentTransaction = FM.beginTransaction()
+            FT.add(R.id.fragment, fragmentLista)
+            FT.commit()
+
+            /*9
             val FT: FragmentTransaction = FM.beginTransaction()
             FT.replace(R.id.fragment,fragmentMapa)
             FT.commit()
@@ -101,19 +128,24 @@ class ChatActivity : AppCompatActivity() {
             FT.commit()
 
         }*/
+        }
     }
 
     override fun onBackPressed() {
 
+        var datosUsuario = intent.extras
+        if (datosUsuario != null) {
+            finish()
+        } else {
+            if (FM.fragments[0] is ChatFragment) {
+                val FT: FragmentTransaction = FM.beginTransaction()
+                FT.replace(R.id.fragment, fragmentLista)
+                FT.commit()
+            } else super.onBackPressed()
 
-        if(FM.fragments[0] is ChatFragment)
-        {
-            val FT: FragmentTransaction = FM.beginTransaction()
-            FT.replace(R.id.fragment, fragmentLista)
-            FT.commit()
         }
-        else super.onBackPressed()
-
     }
+
+
 
 }

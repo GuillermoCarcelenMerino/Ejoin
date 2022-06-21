@@ -1,5 +1,6 @@
 package app.Ejoin.Activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,10 +14,12 @@ import app.Ejoin.Adapter.RecyclerChatLista
 import app.Ejoin.DataClasses.Chat
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import utilities.Constants
+import utilities.PreferencesManager
 
 class ChatListfragment : Fragment() {
     private lateinit var usuarios: ArrayList<Usuarios>
@@ -29,6 +32,9 @@ class ChatListfragment : Fragment() {
     lateinit var fragmentChat: ChatFragment
     lateinit var FM: FragmentManager
     private val db = Firebase.firestore
+
+    private lateinit var userPreferences : PreferencesManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,9 +49,8 @@ class ChatListfragment : Fragment() {
     ): View? {
         var V=inflater.inflate(R.layout.fragment_chat_listfragment, container, false)
         recyclerView = V.findViewById(R.id.recyclerChatList)
-
-
-
+        initActionBar(V)
+        userPreferences= PreferencesManager(requireActivity())
 
         for (hablado in usuarios){
             for(chat in usuario.getChats())
@@ -74,11 +79,13 @@ class ChatListfragment : Fragment() {
     private fun initRecycler() {
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        if(usuariosHablados.size==0){
-            adapter = RecyclerChatLista(usuarios  ,this)
 
-        }
-        else adapter = RecyclerChatLista(usuariosHablados  ,this)
+        adapter = RecyclerChatLista(usuarios,usuario.getChats()  ,this)
+//        if(usuariosHablados.size==0){
+//            adapter = RecyclerChatLista(usuarios  ,this)
+//
+//        }
+//        else adapter = RecyclerChatLista(usuariosHablados  ,this)
         recyclerView.adapter = adapter
 
 
@@ -95,10 +102,10 @@ class ChatListfragment : Fragment() {
                                     usuariosHablados.add(hablado)
                         }
                         if(usuariosHablados.size==0){
-                            adapter = RecyclerChatLista(usuarios  ,this)
+                            adapter = RecyclerChatLista(usuarios,usuario.getChats()  ,this)
 
                         }
-                        else adapter = RecyclerChatLista(usuariosHablados  ,this)
+                        else adapter = RecyclerChatLista(usuarios,usuario.getChats()  ,this)
                         recyclerView.adapter = adapter
                     }
                 }
@@ -109,7 +116,12 @@ class ChatListfragment : Fragment() {
 
             }
 
-
+    fun replaceFragment(chatGrupo: Chat) {
+        fragmentChat = ChatFragment.newInstance(usuario,chatGrupo)
+        val FT: FragmentTransaction = FM.beginTransaction()
+        FT.replace(R.id.fragment, fragmentChat)
+        FT.commit()
+    }
 
 
     fun replaceFragment(usuarioIr: Usuarios) {
@@ -117,5 +129,29 @@ class ChatListfragment : Fragment() {
         val FT: FragmentTransaction = FM.beginTransaction()
         FT.replace(R.id.fragment, fragmentChat)
         FT.commit()
+    }
+
+    private fun initActionBar(V: View) {
+        V.findViewById<BottomNavigationView>(R.id.bottom_navigationChat).selectedItemId=R.id.chat
+        V.findViewById<BottomNavigationView>(R.id.bottom_navigationChat).setOnNavigationItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.home -> {
+                    startActivity(Intent(requireActivity(),MainActivity::class.java))
+                    true
+                }
+                R.id.perfil -> {
+                    userPreferences = PreferencesManager(requireActivity())
+                    startActivity(Intent(requireActivity(),Perfil::class.java).apply {
+
+                        putExtra(Constants.EMAIL,userPreferences.getString(Constants.EMAIL))
+                        putExtra(Constants.USERPHOTO,userPreferences.getString(Constants.USERPHOTO))
+                        putExtra(Constants.NOMBREUSUARIO,userPreferences.getString(Constants.NOMBREUSUARIO))
+                    })
+                    true
+                }
+                else -> false
+            }
+        }
+
     }
 }

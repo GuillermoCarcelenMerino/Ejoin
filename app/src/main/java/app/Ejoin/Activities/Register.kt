@@ -142,18 +142,13 @@ class Register : AppCompatActivity() {
                         //guardar en preferences
                         userPreferences = PreferencesManager(this)
                         userPreferences.putString(Constants.EMAIL,usuario.getEmail())
-                        userPreferences.putBoolean(Constants.LOGEADO, true)
+                        userPreferences.putBoolean(Constants.LOGEADO, false)
                         userPreferences.putString(Constants.USERID, auth.currentUser!!.uid)
                         userPreferences.putBoolean(Constants.ESEMPRESA, usuario.getEsEmpresa())
                         userPreferences.putString(Constants.USERPHOTO, usuario.getPhoto())
                         userPreferences.putString(Constants.NOMBREUSUARIO, usuario.getName())
 
-
-                        if(usuario.getEsEmpresa())
-                        {
-                            startActivity(Intent(this, EmpresaActivity::class.java))
-                        }
-                        else startActivity(Intent(this, MainActivity::class.java))
+                        startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     }
                     .addOnFailureListener { e ->

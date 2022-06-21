@@ -112,14 +112,23 @@
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
-                style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:menu="@menu/navigation_menu" />
 
         </RelativeLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/addEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            android:text="Event"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            app:icon="@drawable/add"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <com.google.android.material.navigation.NavigationView
@@ -131,6 +140,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         />
+
+
 
 
 

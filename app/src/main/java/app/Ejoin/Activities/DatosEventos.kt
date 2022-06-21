@@ -1,16 +1,22 @@
 package app.Ejoin.Activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.Ejoin.Adapter.RecyclerUsuarios
+import app.Ejoin.DataClasses.Chat
 import app.Ejoin.DataClasses.Evento
+import app.Ejoin.DataClasses.Message
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -131,15 +137,35 @@ class DatosEventos : AppCompatActivity() {
 
     private fun inscribirse() {
         userPreferences = PreferencesManager(this)
-        inscribirse.setOnClickListener{
+
+        var usuarioEmail = userPreferences.getString(Constants.EMAIL)
+        var maxUsuarios = evento.getMaxUsuarios()
+        var inscritos = evento.getusuarios()
+        if(inscritos.size<maxUsuarios.toInt() && !inscritos.contains(usuarioEmail)) {
+            if (usuarioEmail != null) {
+
+                inscribirse.setOnClickListener {
+
+                    startActivityForResult(Intent(this, PasarelaPagoJava::class.java).apply {
+                        putExtra(Constants.PRECIO, evento.getPrecio())
+                    }, 1)
+
+
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode== RESULT_OK){
             var usuarioEmail = userPreferences.getString(Constants.EMAIL)
             var maxUsuarios = evento.getMaxUsuarios()
             var inscritos = evento.getusuarios()
-            if(inscritos.size<maxUsuarios.toInt() && !inscritos.contains(usuarioEmail))
-            {
-                if (usuarioEmail != null) {
+
                     var nuevosusuarios : MutableList<String> = inscritos.toMutableList()
-                    nuevosusuarios.add(usuarioEmail)
+                    nuevosusuarios.add(usuarioEmail!!)
                     evento.setUsuarios(nuevosusuarios as ArrayList<String>)
                     db.collection(Constants.EVENTOSDB)
                         .document(evento.getId()!!)
@@ -157,10 +183,53 @@ class DatosEventos : AppCompatActivity() {
                             recyclerView.adapter = adapter
                         }
                         .addOnFailureListener {  }
+
+            db.collection(Constants.CHATS).document(evento.getId()!!).get().addOnSuccessListener {
+                var usuario = userPreferences.getString(Constants.EMAIL)
+               var chat = it.toObject(Chat::class.java)
+                var userChat = ArrayList(chat!!.users)
+                userChat.add(usuario)
+                chat.users=userChat
+                for (user in chat.users)
+                {
+                    if(user!=usuario)
+                    //update chats from userOrigin
+                    db.collection(Constants.USERBD).whereEqualTo(Constants.EMAIL,user).get().addOnSuccessListener {
+                        it.documents.get(0)
+                            .reference
+                            .collection("chats")
+                            .document(chat.id)
+                            .update("users",chat.users)
+                            .addOnSuccessListener {
+                                print(it)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this,"No pudo inscribirse al chat",Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                    else{
+                        db.collection(Constants.USERBD).whereEqualTo(Constants.EMAIL,user).get().addOnSuccessListener {
+                            it.documents.get(0)
+                                .reference
+                                .collection("chats")
+                                .document(chat.id)
+                                .set(chat)
+                                .addOnSuccessListener {
+                                    print(it)
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(this,"No pudo inscribirse al chat",Toast.LENGTH_SHORT).show()
+                                }
+                        }
+                    }
                 }
 
+                it.reference.update("users",userChat).addOnSuccessListener {
+                    print("hola")
+                }
             }
-
-        }
+            }
     }
+
+
 }

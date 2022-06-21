@@ -44,11 +44,7 @@ class LoginActivity : AppCompatActivity() {
         userPreferences = PreferencesManager(this)
         var logeado : Boolean? = userPreferences.getBoolean(Constants.LOGEADO)
         if(logeado == true){
-            if(userPreferences.getBoolean(Constants.ESEMPRESA))
-            {
-                startActivity(Intent(this, EmpresaActivity::class.java))
-            }
-            else startActivity(Intent(this, MainActivity::class.java))
+             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
         email = findViewById(R.id.UsuarioMail)
@@ -57,6 +53,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun addButtonFuncionality() {
+
         var esEmpresa = false
         findViewById<Button>(R.id.login).setOnClickListener {
             if(email.text.toString() !="" && passWord.text.toString()!=""){
@@ -67,30 +64,23 @@ class LoginActivity : AppCompatActivity() {
                     whereEqualTo(Constants.EMAIL,email.text.toString())
                         .get()
                         .addOnSuccessListener {
-
-
-                            if(findViewById<CheckBox>(R.id.rememberMe).isChecked)
-                            {
-                                esEmpresa=it.documents[0].getBoolean("esEmpresa") ==true
+                                esEmpresa= it.documents[0].getBoolean("esEmpresa")!!
                                 userPreferences.putBoolean(Constants.ESEMPRESA,esEmpresa)
-                            }
                             userPreferences.putString(Constants.USERPHOTO,it.documents[0].getString(Constants.USERPHOTO)!!)
                             userPreferences.putString(Constants.NOMBREUSUARIO, it.documents[0].getString(Constants.NOMBREUSUARIO)!!)
+                            userPreferences.putString(Constants.EMAIL,email.text.toString())
+                            userPreferences.putString(Constants.USERID,auth.currentUser!!.uid)
+                            if(findViewById<CheckBox>(R.id.rememberMe).isChecked){
 
+                                userPreferences.putBoolean(Constants.LOGEADO,true)
+
+                            }
+                            else  userPreferences.putBoolean(Constants.LOGEADO,false)
+
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
                         }
 
-                    if(findViewById<CheckBox>(R.id.rememberMe).isChecked){
-                    userPreferences.putString(Constants.EMAIL,email.text.toString())
-                    userPreferences.putBoolean(Constants.LOGEADO,true)
-                    userPreferences.putString(Constants.USERID,auth.currentUser!!.uid)
-                    }
-                    if(esEmpresa)
-                    {
-                        startActivity(Intent(this, EmpresaActivity::class.java))
-                    }
-                    else
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
                 }.addOnFailureListener {
                     Toast.makeText(this,"Los datos no coinciden",Toast.LENGTH_LONG).show()
                 }

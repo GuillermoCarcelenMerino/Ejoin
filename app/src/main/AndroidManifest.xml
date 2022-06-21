@@ -20,6 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ejoin">
         <activity
+            android:name=".Activities.AddEvent"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.PasarelaPago"
+            android:exported="true" />
+        <activity
+            android:name=".Activities.PasarelaPagoJava"
+            android:exported="true" />
+        <activity
             android:name=".Activities.FilterActivity"
             android:exported="true" />
         <!--
