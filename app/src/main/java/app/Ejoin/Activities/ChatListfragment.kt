@@ -81,11 +81,7 @@ class ChatListfragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         adapter = RecyclerChatLista(usuarios,usuario.getChats()  ,this)
-//        if(usuariosHablados.size==0){
-//            adapter = RecyclerChatLista(usuarios  ,this)
-//
-//        }
-//        else adapter = RecyclerChatLista(usuariosHablados  ,this)
+
         recyclerView.adapter = adapter
 
 

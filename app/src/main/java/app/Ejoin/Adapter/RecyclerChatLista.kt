@@ -11,6 +11,7 @@ import app.Ejoin.Activities.ChatListfragment
 import app.Ejoin.DataClasses.Chat
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
+import com.bumptech.glide.Glide
 import com.mikhaellopez.circularimageview.CircularImageView
 import utilities.Constants
 import utilities.PreferencesManager
@@ -38,9 +39,9 @@ class RecyclerChatLista (private val dataSet: ArrayList<Usuarios>, private val c
             if(chats.size!=0) {
                 if (chats[position].evento) {
                     viewHolder.chatGrupo = chats[position]
-                    val imageBytes = Base64.decode(chats[position].photo, 0)
-                    val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                    viewHolder.imagenChat.setImageBitmap(bitmap)
+                    Glide.with(fragment )
+                        .load(chats[position].photo)
+                        .into( viewHolder.imagenChat)
                     viewHolder.nombreChat.text = "evento " + position
 
 
@@ -48,7 +49,9 @@ class RecyclerChatLista (private val dataSet: ArrayList<Usuarios>, private val c
                     for (hablado in dataSet) {
 
                         if (chats[position].users.contains(hablado.getEmail()) && hablado.getEmail() != usuario) {
-                            viewHolder.imagenChat.setImageBitmap(hablado.photoBitmap())
+                            Glide.with(fragment )
+                                .load(hablado.getPhoto())
+                                .into( viewHolder.imagenChat)
                             viewHolder.nombreChat.text = hablado.getName()
                             viewHolder.usuarioIr = hablado
                         }
@@ -59,7 +62,9 @@ class RecyclerChatLista (private val dataSet: ArrayList<Usuarios>, private val c
             }
         else {
             if(dataSet[position].getEmail()!=usuario){
-                viewHolder.imagenChat.setImageBitmap(dataSet[position].photoBitmap())
+                Glide.with(fragment )
+                    .load(dataSet[position].getPhoto())
+                    .into( viewHolder.imagenChat)
                 viewHolder.nombreChat.text = dataSet[position].getName()
                 viewHolder.usuarioIr = dataSet[position]
             }

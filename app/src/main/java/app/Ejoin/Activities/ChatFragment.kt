@@ -19,7 +19,10 @@ import app.Ejoin.DataClasses.Chat
 import app.Ejoin.DataClasses.Message
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
+import com.bumptech.glide.Glide
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -44,6 +47,7 @@ class ChatFragment : Fragment() {
 
     private  var mensajes : MutableList<Message> = mutableListOf()
     private val db = Firebase.firestore
+    private lateinit var auth: FirebaseAuth
 
     private lateinit var chat : Chat
 
@@ -70,13 +74,13 @@ class ChatFragment : Fragment() {
         //chat grupo
         if(chatFin!=null)
         {
-
             newChat=false
             cargarMensages(chatFin!!)
             this.nombreUsuarioFin.text= chatFin!!.id
-            val imageBytes = Base64.decode(chatFin!!.photo, 0)
-            val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            photoUsuarioFin.setImageBitmap(bitmap)
+
+            Glide.with(requireActivity() )
+                .load(chatFin!!.photo)
+                .into( photoUsuarioFin)
             sendMessage.setOnClickListener { x->sendMessageChat() }
         }
         //chat individual
@@ -85,7 +89,9 @@ class ChatFragment : Fragment() {
         {
             chat.users= listOf( usuarioOrigen.getEmail(),usuarioFin.getEmail())
             this.nombreUsuarioFin.text=usuarioFin.getName()
-            photoUsuarioFin.setImageBitmap(usuarioFin.photoBitmap())
+            Glide.with(requireActivity() )
+                .load(usuarioFin.getPhoto())
+                .into( photoUsuarioFin)
             sendMessage.setOnClickListener { x->sendMessageChat() }
 
             comprobarNewChat()

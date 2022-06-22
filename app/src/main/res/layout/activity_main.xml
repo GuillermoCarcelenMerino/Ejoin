@@ -125,8 +125,7 @@
             android:layout_margin="14dp"
             android:text="Event"
             app:layout_constraintBottom_toBottomOf="@+id/fragment"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"
+app:layout_constraintStart_toStartOf="parent"            android:visibility="gone"
             app:icon="@drawable/add"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

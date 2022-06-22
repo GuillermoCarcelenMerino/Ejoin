@@ -5,106 +5,180 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.Register">
+
+    <TextView
+        android:layout_marginTop="100dp"
+        android:id="@+id/NombreApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="EJOIN"
+        android:textColor="@color/black"
+        android:textSize="45dp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progresBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="100dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/NombreApp" />
+
+    <TextView
+        android:id="@+id/bienvenido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="Bienvenido"
+        android:textColor="@color/black"
+        android:textSize="45dp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progresBar" />
+
+    <TextView
+        android:id="@+id/espere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Espere en lo que creamos su usuario"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        android:visibility="gone"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bienvenido" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/formulario"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <TextView
+            android:id="@+id/nuevoUsuario"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="NUEVO USUARIO"
-            android:textStyle="bold"
-            android:textAlignment="center"
             android:fontFamily="sans-serif"
-            android:textColor="@color/black"/>
+            android:text="NUEVO USUARIO"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_gravity="center_horizontal"
             android:id="@+id/fotoPerfil"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            app:civ_border_width="0.5dp"
             android:src="@drawable/profile"
             app:civ_border_color="@color/black"
+            app:civ_border_width="0.5dp"
             app:civ_shadow_gravity="center" />
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/nombreRegisterTextView"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:gravity=""
                 android:text="Nombre *"
-                android:textColor="@color/black"
-                android:gravity=""/>
+                android:textColor="@color/black" />
+
             <EditText
                 android:id="@+id/nombreRegister"
-                android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nombre de usuario"/>
+                android:layout_marginLeft="20dp"
+                android:hint="Nombre de usuario" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/correoRegisterTextView"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="Correo *"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
+
             <EditText
                 android:id="@+id/correoRegister"
-                android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Example@gmail.com"/>
+                android:layout_marginLeft="20dp"
+                android:hint="Example@gmail.com" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/passwordRegisterTextView"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="Password *"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
+
             <EditText
                 android:id="@+id/passwordRegister"
-                android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"/>
+                android:layout_marginLeft="20dp"
+                android:hint="Password" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/password2RegisterTextView"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:text="Repite Password *"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
+
             <EditText
                 android:id="@+id/password2Register"
-                android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"/>
+                android:layout_marginLeft="20dp"
+                android:hint="Password" />
         </LinearLayout>
 
         <TextView
@@ -112,38 +186,38 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:textColor="#E81010"
-            android:textSize="6dp"
-            />
+            android:textSize="6dp" />
 
         <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <CheckBox
-            android:id="@+id/esEmpresa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/esEmpresa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <TextView
-                android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-               android:text="¿se esta registrando como empresa?"/>
+                android:layout_marginLeft="20dp"
+                android:text="¿se esta registrando como empresa?" />
 
         </LinearLayout>
+
         <Button
             android:id="@+id/confirmRegister"
-            android:layout_marginTop="30dp"
             android:layout_width="300dp"
             android:layout_height="60dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#F4A6"
             android:gravity="center"
             android:text="Confirmar Usuario"
-            android:textSize="20sp"
-            android:backgroundTint="#F4A6"/>
-
-
+            android:textSize="20sp" />
 
 
     </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

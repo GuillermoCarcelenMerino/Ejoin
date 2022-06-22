@@ -1,5 +1,6 @@
 package app.Ejoin.Adapter
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import app.Ejoin.Activities.DatosEventos
 import app.Ejoin.DataClasses.Evento
 import app.Ejoin.R
+import com.bumptech.glide.Glide
 import utilities.Constants
 
-class RecyclerEventos (private val dataSet: ArrayList<Evento>) :
+class RecyclerEventos (private val context : Context,private val dataSet: ArrayList<Evento>) :
 RecyclerView.Adapter<RecyclerEventos.ViewHolder>() {
 
     // Create new views (invoked by the layout manager)
@@ -38,7 +40,9 @@ RecyclerView.Adapter<RecyclerEventos.ViewHolder>() {
         viewHolder.categoria.text = dataSet[position].getCategoria()
         viewHolder.usuarios.text = dataSet[position].getusuarios().size.toString() + "/"+ dataSet[position].getMaxUsuarios().toString()
         viewHolder.evento = dataSet[position]
-        viewHolder.photo.setImageBitmap( dataSet[position].photoBitmap())
+        Glide.with(context )
+            .load(dataSet[position].getPhoto())
+            .into(viewHolder.photo)
 
 
     }

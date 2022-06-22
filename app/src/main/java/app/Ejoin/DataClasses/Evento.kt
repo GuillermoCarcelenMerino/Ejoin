@@ -153,18 +153,6 @@ class Evento : Serializable {
     fun getPhoto() : String {
         return photo
     }
-    fun photoBitmap(): Bitmap {
-        val imageBytes = Base64.decode(photo, 0)
-        val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        return bitmap
-    }
 
-    fun encodeImage(bitmap : Bitmap){
-        var previewBitmap = Bitmap.createScaledBitmap(bitmap,60,60,false)
-        var byteArray = ByteArrayOutputStream()
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArray)
-        var bytes = byteArray.toByteArray()
-        photo= Base64.encodeToString(bytes, Base64.DEFAULT)
-    }
 
 }

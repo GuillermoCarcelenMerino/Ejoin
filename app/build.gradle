@@ -75,6 +75,7 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
+    implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
 
 
 }

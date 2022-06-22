@@ -15,6 +15,7 @@ import app.Ejoin.DataClasses.Evento
 import app.Ejoin.DataClasses.Message
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
@@ -60,7 +61,6 @@ class DatosEventos : AppCompatActivity() {
         db.collection(Constants.USERBD).whereIn(Constants.EMAIL, evento.getusuarios())
             .get()
             .addOnSuccessListener {
-               // for (doc in it.documents){
                 it.documents.forEach {
 
                     var usuario  = Usuarios(
@@ -81,7 +81,7 @@ class DatosEventos : AppCompatActivity() {
     private fun initRecycler() {
         recyclerView = findViewById(R.id.participantes)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        adapter = RecyclerUsuarios(usuarios as ArrayList<Usuarios>)
+        adapter = RecyclerUsuarios(this,usuarios as ArrayList<Usuarios>)
         recyclerView.adapter = adapter
 
         //adapter.notifyDataSetChanged()
@@ -106,7 +106,9 @@ class DatosEventos : AppCompatActivity() {
         numParticipantes.text = evento.getusuarios().size.toString() +"/" + evento.getMaxUsuarios()
         detalles.text= evento.getDetalles()
         precio.text = evento.getPrecio().toString()
-        photo.setImageBitmap(evento.photoBitmap())
+        Glide.with(this )
+            .load(evento.getPhoto())
+            .into(photo)
 
     }
 
@@ -179,7 +181,7 @@ class DatosEventos : AppCompatActivity() {
                                 userPreferences.getBoolean(Constants.ESEMPRESA))
 
                             usuarios.add(usuarioNuevo)
-                            adapter= RecyclerUsuarios(usuarios as ArrayList<Usuarios>)
+                            adapter= RecyclerUsuarios(this,usuarios as ArrayList<Usuarios>)
                             recyclerView.adapter = adapter
                         }
                         .addOnFailureListener {  }

@@ -1,5 +1,6 @@
 package app.Ejoin.Adapter
 
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +12,11 @@ import app.Ejoin.Activities.LoginActivity
 import app.Ejoin.Activities.Perfil
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
+import com.bumptech.glide.Glide
 import com.mikhaellopez.circularimageview.CircularImageView
 import utilities.Constants
 
-class RecyclerUsuarios (private val dataSet : ArrayList<Usuarios>) :
+class RecyclerUsuarios (private val context : Activity,private val dataSet : ArrayList<Usuarios>) :
     RecyclerView.Adapter<RecyclerUsuarios.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,12 +24,13 @@ class RecyclerUsuarios (private val dataSet : ArrayList<Usuarios>) :
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.userrow, parent, false)
 
-        return RecyclerUsuarios.ViewHolder(view)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        holder.imagen.setImageBitmap(dataSet[position].photoBitmap())
+        Glide.with(context )
+            .load(dataSet[position].getPhoto())
+            .into( holder.imagen)
         holder.nombreUsuario.text = dataSet[position].getName()
         holder.usuario = dataSet[position]
     }

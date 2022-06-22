@@ -8,14 +8,17 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Patterns
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.mikhaellopez.circularimageview.CircularImageView
 import utilities.Constants
 import utilities.PreferencesManager
@@ -34,6 +37,8 @@ class Register : AppCompatActivity() {
     private lateinit var usuario: Usuarios
     private var canBeSaved: Boolean = true
     private lateinit var checkBox : CheckBox
+    private lateinit var uri : Uri
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,6 +128,12 @@ class Register : AppCompatActivity() {
     }
 
     private fun createUser() {
+        findViewById<ConstraintLayout>(R.id.formulario).visibility= View.GONE
+        findViewById<TextView>(R.id.NombreApp).visibility= View.VISIBLE
+        findViewById<TextView>(R.id.bienvenido).visibility= View.VISIBLE
+        findViewById<TextView>(R.id.espere).visibility= View.VISIBLE
+        findViewById<ProgressBar>(R.id.progresBar).visibility= View.VISIBLE
+
         auth.createUserWithEmailAndPassword(correo.text.toString(), password.text.toString())
             .addOnSuccessListener { task ->
                 /*
@@ -130,31 +141,62 @@ class Register : AppCompatActivity() {
                     +/
                      */
 
+
+
                 val user = auth.currentUser
                 usuario.setEmail(user?.email.toString())
                 usuario.setId(user?.uid.toString())
                 usuario.setName(nombre.text.toString())
                 usuario.setEsEmpresa(checkBox.isChecked)
 
-                db.collection(Constants.USERBD)
-                    .add(usuario)
-                    .addOnSuccessListener { documentReference ->
-                        //guardar en preferences
-                        userPreferences = PreferencesManager(this)
-                        userPreferences.putString(Constants.EMAIL,usuario.getEmail())
-                        userPreferences.putBoolean(Constants.LOGEADO, false)
-                        userPreferences.putString(Constants.USERID, auth.currentUser!!.uid)
-                        userPreferences.putBoolean(Constants.ESEMPRESA, usuario.getEsEmpresa())
-                        userPreferences.putString(Constants.USERPHOTO, usuario.getPhoto())
-                        userPreferences.putString(Constants.NOMBREUSUARIO, usuario.getName())
 
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(this, "Fallo al introducir usuario", Toast.LENGTH_LONG)
-                            .show()
-                    }
+                var storage = Firebase.storage
+
+                val storageRef = storage.reference
+                var file = uri
+                val riversRef = storageRef.child("usuarios/"+user?.email.toString())
+                var uploadTask = riversRef.putFile(file!!)
+
+                // Register observers to listen for when the download is done or if it fails
+                uploadTask.addOnSuccessListener { taskSnapshot ->
+
+                    taskSnapshot.storage.downloadUrl.addOnCompleteListener {
+                        var imagenUrl = it.result.toString()
+                        usuario.setPhoto(imagenUrl)
+                        db.collection(Constants.USERBD)
+                            .add(usuario)
+                            .addOnSuccessListener { documentReference ->
+                                //guardar en preferences
+                                userPreferences = PreferencesManager(this)
+                                userPreferences.putString(Constants.EMAIL,usuario.getEmail())
+                                userPreferences.putBoolean(Constants.LOGEADO, false)
+                                userPreferences.putString(Constants.USERID, auth.currentUser!!.uid)
+                                userPreferences.putBoolean(Constants.ESEMPRESA, usuario.getEsEmpresa())
+                                userPreferences.putString(Constants.USERPHOTO, imagenUrl)
+                                userPreferences.putString(Constants.NOMBREUSUARIO, usuario.getName())
+
+                                startActivity(Intent(this, MainActivity::class.java))
+                                finish()
+                            }
+                            .addOnFailureListener { e ->
+                                findViewById<ConstraintLayout>(R.id.formulario).visibility= View.VISIBLE
+                                findViewById<TextView>(R.id.NombreApp).visibility= View.GONE
+                                findViewById<ProgressBar>(R.id.progresBar).visibility= View.GONE
+                                findViewById<TextView>(R.id.bienvenido).visibility= View.GONE
+                                findViewById<TextView>(R.id.espere).visibility= View.GONE
+                                Toast.makeText(this, "Fallo al introducir usuario", Toast.LENGTH_LONG)
+                                    .show()
+                            }
+
+
+
+
+
+                    }}
+
+
+
+
                 //TODO remplazar vista con un progressbar
 
 
@@ -176,12 +218,11 @@ class Register : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         //Procesar el resultado
         if (data != null) {
-            val uri = data.data
+             uri = data.data!!
             try{
                 var x = contentResolver.openInputStream(uri!!)
                 var bitmap = BitmapFactory.decodeStream(x)
                 imagenButton.setImageBitmap(bitmap)
-                usuario.encodeImage(bitmap)
                 fotoSel=true
 
             }catch (e : FileNotFoundException){

@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         auth = Firebase.auth
-        initNavView()
         initActionBar()
         cargarEventos()
         userPreferences = PreferencesManager(this)
@@ -106,35 +105,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    /**
-     * TODO Desarrolla la funcionalidad del navVar
-     * */
-    private fun initNavView() {
-        navView = findViewById(R.id.nav_View)
-        navView.setNavigationItemSelectedListener {
-            when(it.itemId){
 
-                R.id.nav_home -> Toast.makeText(this,"clicked 1", Toast.LENGTH_LONG).show()
-                R.id.nav_logOut -> {
-                    auth.signOut()
-                    userPreferences = PreferencesManager(this)
-                    userPreferences.putString(Constants.EMAIL,"")
-                    userPreferences.putBoolean(Constants.LOGEADO,false)
-                    userPreferences.putString(Constants.USERID,"")
-                    userPreferences.putString(Constants.USERPHOTO,"" )
-                    userPreferences.putString(Constants.NOMBREUSUARIO ,"")
-                    userPreferences.putBoolean(Constants.ESEMPRESA,false)
-
-
-                    startActivity(Intent(this,LoginActivity::class.java))
-                    //TODO limpiar historial de activities para que no pueda voler
-                }
-                R.id.nav_sync -> Toast.makeText(this,"clicked 1", Toast.LENGTH_LONG).show()
-
-            }
-            true
-        }
-    }
 
     private fun cargarEventos() {
 

@@ -115,19 +115,6 @@ class ChatActivity : AppCompatActivity() {
             FT.add(R.id.fragment, fragmentLista)
             FT.commit()
 
-            /*9
-            val FT: FragmentTransaction = FM.beginTransaction()
-            FT.replace(R.id.fragment,fragmentMapa)
-            FT.commit()
-
-        }
-        findViewById<Button>(R.id.botonEvento).setOnClickListener{
-
-            val FT: FragmentTransaction = FM.beginTransaction()
-            FT.replace(R.id.fragment,fragmentEvento)
-            FT.commit()
-
-        }*/
         }
     }
 
@@ -137,7 +124,7 @@ class ChatActivity : AppCompatActivity() {
         if (datosUsuario != null) {
             finish()
         } else {
-            if (FM.fragments[0] is ChatFragment) {
+            if (FM.fragments[1] is ChatFragment) {
                 val FT: FragmentTransaction = FM.beginTransaction()
                 FT.replace(R.id.fragment, fragmentLista)
                 FT.commit()

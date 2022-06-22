@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Perfil"
     android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarPerfil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <Button
         android:id="@+id/chatButton"
         android:layout_margin="20dp"
@@ -23,7 +29,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@id/toolbarPerfil">
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/fotoPerfilAjustes"

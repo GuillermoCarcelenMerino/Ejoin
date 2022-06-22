@@ -117,6 +117,7 @@ private lateinit var mapa : GoogleMap
                 .icon(BitmapDescriptorFactory.fromResource(setIcon(evento.getCategoria())))
 
         )!!.tag = evento
+
             }
 
     private fun setIcon(categoria: String): Int {
