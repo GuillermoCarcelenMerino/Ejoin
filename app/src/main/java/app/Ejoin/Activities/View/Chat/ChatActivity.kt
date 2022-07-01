@@ -1,14 +1,13 @@
-package app.Ejoin.Activities
+package app.Ejoin.Activities.View.Chat
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import app.Ejoin.DataClasses.Chat
-import app.Ejoin.DataClasses.Usuarios
+import app.Ejoin.Activities.View.Chat.fragments.ChatFragment
+import app.Ejoin.Activities.View.Chat.fragments.ChatListfragment
+import app.Ejoin.DataClasses.Usuario
 import app.Ejoin.R
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -21,12 +20,12 @@ class ChatActivity : AppCompatActivity() {
     val FM: FragmentManager = supportFragmentManager
     lateinit var fragmentLista: ChatListfragment
     private lateinit var userPreferences : PreferencesManager
-    private lateinit var user : Usuarios
+    private lateinit var user : Usuario
 
     //Datos para el recycler de usuarios
     private val db = Firebase.firestore
-    var usuarios : MutableList<Usuarios> = mutableListOf()
-    private  lateinit var  usuario : Usuarios
+    var usuarios : MutableList<Usuario> = mutableListOf()
+    private  lateinit var  usuario : Usuario
     private  lateinit var userReference : DocumentReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,20 +36,77 @@ class ChatActivity : AppCompatActivity() {
 
         userPreferences = PreferencesManager(this)
 
-            usuario= Usuarios(
-                userPreferences.getString(Constants.EMAIL)!!,
-                userPreferences.getString(Constants.USERID)!!,
-                userPreferences.getString(Constants.USERPHOTO)!!,
-                userPreferences.getString(Constants.NOMBREUSUARIO)!!,
-                userPreferences.getBoolean(Constants.ESEMPRESA)
-            )
-        cargarRecycler()
+            usuario= Usuario()
+                usuario.email=userPreferences.getString(Constants.EMAIL)!!
+               usuario.photo= userPreferences.getString(Constants.USERPHOTO)!!
+                usuario.name =userPreferences.getString(Constants.NOMBREUSUARIO)!!
+                usuario.esEmpresa=userPreferences.getBoolean(Constants.ESEMPRESA)
+
+        initControlFragments()
+       // cargarRecycler()
+
 
 
 
     }
 
 
+
+    private fun initControlFragments() {
+        var datosUsuario=intent.extras
+        if(datosUsuario!=null)
+        {
+
+            var usuarioIr  = Usuario()
+            usuarioIr.name= datosUsuario.getString(Constants.NOMBREUSUARIO)!!
+            usuarioIr.email=datosUsuario.getString(Constants.EMAIL)!!
+            usuarioIr.photo=datosUsuario.getString(Constants.USERPHOTO)!!
+            usuarioIr.esEmpresa=datosUsuario.getBoolean(Constants.ESEMPRESA)!!
+
+            var fragmentChat = ChatFragment.newInstance(usuario.email, usuarioIr)
+            val FT: FragmentTransaction = FM.beginTransaction()
+            FT.replace(R.id.fragment, fragmentChat)
+            FT.commit()
+
+        }
+
+        else {
+
+            fragmentLista = ChatListfragment()
+            val FT: FragmentTransaction = FM.beginTransaction()
+            FT.add(R.id.fragment, fragmentLista)
+            FT.commit()
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
     private fun cargarRecycler() {
 
         db.collection(Constants.USERBD).get()
@@ -58,13 +114,12 @@ class ChatActivity : AppCompatActivity() {
 
                 it.documents.forEach {
 
-                    var usuario  = Usuarios(
+                    var usuario  = Usuario(
                         it.getString(Constants.EMAIL)!!,
-                        it.getString(Constants.USERID)!! ,
                         it.getString(Constants.USERPHOTO)!!,
                         it.getString(Constants.NOMBREUSUARIO)!! ,
                         it.getBoolean(Constants.ESEMPRESA)!!)
-                    if(it.getString(Constants.EMAIL)!=this.usuario.getEmail()) {
+                    if(it.getString(Constants.EMAIL)!=this.usuario.email) {
                         usuarios.add(usuario)
                     }
                     else {
@@ -76,7 +131,7 @@ class ChatActivity : AppCompatActivity() {
 
                 userReference.collection("chats").get().addOnSuccessListener {
                     var chats = it.toObjects(Chat::class.java)
-                    usuario.setChats(chats as ArrayList<Chat>)
+                    usuario.chats=chats as ArrayList<Chat>
                     initControlFragments()
                 }
 
@@ -91,10 +146,10 @@ class ChatActivity : AppCompatActivity() {
         var datosUsuario=intent.extras
         if(datosUsuario!=null)
         {
-            var usuarioIr : Usuarios = Usuarios()
+            var usuarioIr : Usuario = Usuario()
             var emailUsuario = datosUsuario.get(Constants.EMAIL)
             for(usuario in usuarios){
-                if(usuario.getEmail()==emailUsuario)
+                if(usuario.email==emailUsuario)
                     usuarioIr = usuario
             }
 
@@ -107,7 +162,7 @@ class ChatActivity : AppCompatActivity() {
 
         else {
             fragmentLista = ChatListfragment.newInstance(
-                usuarios as ArrayList<Usuarios>,
+                usuarios as ArrayList<Usuario>,
                 usuario,
                 userReference
             )
@@ -133,6 +188,6 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-
+*/
 
 }

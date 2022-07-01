@@ -5,18 +5,17 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import app.Ejoin.Activities.LoginActivity
-import app.Ejoin.Activities.Perfil
-import app.Ejoin.DataClasses.Usuarios
+import app.Ejoin.Activities.View.Perfil
+import app.Ejoin.DataClasses.Chat
+import app.Ejoin.DataClasses.Usuario
 import app.Ejoin.R
 import com.bumptech.glide.Glide
 import com.mikhaellopez.circularimageview.CircularImageView
 import utilities.Constants
 
-class RecyclerUsuarios (private val context : Activity,private val dataSet : ArrayList<Usuarios>) :
+class RecyclerUsuarios (private val context : Activity,private val dataSet : ArrayList<Usuario>) :
     RecyclerView.Adapter<RecyclerUsuarios.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,9 +28,9 @@ class RecyclerUsuarios (private val context : Activity,private val dataSet : Arr
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(context )
-            .load(dataSet[position].getPhoto())
+            .load(dataSet[position].photo)
             .into( holder.imagen)
-        holder.nombreUsuario.text = dataSet[position].getName()
+        holder.nombreUsuario.text = dataSet[position].name
         holder.usuario = dataSet[position]
     }
 
@@ -39,7 +38,7 @@ class RecyclerUsuarios (private val context : Activity,private val dataSet : Arr
 
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
-        var usuario = Usuarios()
+        var usuario = Usuario()
         val imagen: CircularImageView
         val nombreUsuario : TextView
 
@@ -49,9 +48,12 @@ class RecyclerUsuarios (private val context : Activity,private val dataSet : Arr
             nombreUsuario  =view.findViewById(R.id.nombreUsuario)
             view.setOnClickListener{
                 view.context.startActivity(Intent(view.context, Perfil::class.java).apply {
-                    putExtra(Constants.NOMBREUSUARIO,usuario.getName())
-                    putExtra(Constants.USERPHOTO,usuario.getPhoto())
-                    putExtra(Constants.EMAIL,usuario.getEmail())
+                    putExtra(Constants.NOMBREUSUARIO,usuario.name)
+                    putExtra(Constants.USERPHOTO,usuario.photo)
+                    putExtra(Constants.EMAIL,usuario.email)
+                    putExtra(Constants.ESEMPRESA,usuario.esEmpresa)
+                    putExtra(Constants.CHATS,usuario.chats)
+
                 })
             }
         }

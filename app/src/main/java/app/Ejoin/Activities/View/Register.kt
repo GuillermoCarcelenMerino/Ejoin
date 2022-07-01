@@ -1,26 +1,26 @@
-package app.Ejoin.Activities
+package app.Ejoin.Activities.View
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Patterns
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import app.Ejoin.DataClasses.Usuarios
+import androidx.lifecycle.Observer
+import app.Ejoin.Activities.View.EventosMain.MainActivity
+import app.Ejoin.Activities.ViewModel.RegisterVieweModel
+import app.Ejoin.DataClasses.Usuario
 import app.Ejoin.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.mikhaellopez.circularimageview.CircularImageView
-import utilities.Constants
 import utilities.PreferencesManager
 import java.io.FileNotFoundException
 
@@ -34,12 +34,24 @@ class Register : AppCompatActivity() {
     private lateinit var imagenButton: CircularImageView
     private var fotoSel: Boolean = false
     private val db = Firebase.firestore
-    private lateinit var usuario: Usuarios
+    private lateinit var usuario: Usuario
     private var canBeSaved: Boolean = true
     private lateinit var checkBox : CheckBox
     private lateinit var uri : Uri
 
-
+    /**
+     *
+     *
+     *
+     *
+     *
+     * */
+    private val viewModel : RegisterVieweModel by viewModels()
+    /**
+     *
+     *
+     *
+     * */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +62,33 @@ class Register : AppCompatActivity() {
             checkuserName()
         }
 
+
+        viewModel.nombreUsado.observe(this, Observer {
+
+            if(it){
+                findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.RED)
+                canBeSaved = false
+            }
+            else checkDataAndCreateUser()
+
+        })
+        viewModel.registrado.observe(this, Observer {
+
+            if(it) {
+                findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.RED)
+                canBeSaved = false
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+            else { findViewById<ConstraintLayout>(R.id.formulario).visibility= View.VISIBLE
+            findViewById<TextView>(R.id.NombreApp).visibility= View.GONE
+            findViewById<ProgressBar>(R.id.progresBar).visibility= View.GONE
+            findViewById<TextView>(R.id.bienvenido).visibility= View.GONE
+            findViewById<TextView>(R.id.espere).visibility= View.GONE
+            Toast.makeText(this, "Fallo al introducir usuario", Toast.LENGTH_LONG)
+                .show()}
+
+        })
 
     }
 
@@ -65,37 +104,21 @@ class Register : AppCompatActivity() {
         imagenButton.setOnClickListener {
             selecionarImagen()
         }
-        usuario = Usuarios()
+        usuario = Usuario()
     }
 
 
     private fun checkuserName() {
         if (!nombre.text.toString().equals("")) {
             findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.BLACK)
-            db.collection(Constants.USERBD).
-            whereEqualTo(Constants.NOMBREUSUARIO,nombre.text.toString())
-                .get()
-                .addOnSuccessListener {
-                    if (it.documents.isEmpty()){
-                        checkDataAndCreateUser()
-                    }
-                    else {
-                        findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.RED)
-                        canBeSaved = false
-                    }
 
-                }
-                .addOnFailureListener {
-                    findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.RED)
-                    canBeSaved = false
-                    checkDataAndCreateUser()
-                }
+            viewModel.comprobarDatosLogin(nombre.text.toString())
+        }else {
+                findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.RED)
+                canBeSaved = false
+                checkDataAndCreateUser()
+            }
 
-        } else {
-            findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.RED)
-            canBeSaved = false
-            checkDataAndCreateUser()
-        }
     }
     private fun checkDataAndCreateUser() {
         if (!Patterns.EMAIL_ADDRESS.matcher(correo.text).matches())//TODO verificacion del correo
@@ -134,7 +157,14 @@ class Register : AppCompatActivity() {
         findViewById<TextView>(R.id.espere).visibility= View.VISIBLE
         findViewById<ProgressBar>(R.id.progresBar).visibility= View.VISIBLE
 
-        auth.createUserWithEmailAndPassword(correo.text.toString(), password.text.toString())
+        usuario.email=correo.text.toString()
+        usuario.name=nombre.text.toString()
+        usuario.esEmpresa=checkBox.isChecked
+        viewModel.registrar(nombre.text.toString(),usuario,uri)
+
+
+
+      /*  auth.createUserWithEmailAndPassword(correo.text.toString(), password.text.toString())
             .addOnSuccessListener { task ->
                 /*
                     creamos nuevo usuario con clase user
@@ -197,14 +227,13 @@ class Register : AppCompatActivity() {
 
 
 
-                //TODO remplazar vista con un progressbar
 
 
             }.addOnFailureListener {
                 val errorCode = it.message
                 Toast.makeText(this, errorCode, Toast.LENGTH_LONG).show()
 
-            }
+            }*/
     }
 
     private fun selecionarImagen() {

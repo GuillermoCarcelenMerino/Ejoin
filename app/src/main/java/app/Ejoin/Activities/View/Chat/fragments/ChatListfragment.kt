@@ -1,4 +1,4 @@
-package app.Ejoin.Activities
+package app.Ejoin.Activities.View.Chat.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,11 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.Ejoin.Activities.Model.Chats
+import app.Ejoin.Activities.View.EventosMain.MainActivity
+import app.Ejoin.Activities.View.Perfil
+import app.Ejoin.Activities.ViewModel.ChatListaMVVM
+import app.Ejoin.Activities.ViewModel.PerfilViewModel
 import app.Ejoin.Adapter.RecyclerChatLista
 import app.Ejoin.DataClasses.Chat
-import app.Ejoin.DataClasses.Usuarios
+import app.Ejoin.DataClasses.Usuario
 import app.Ejoin.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.DocumentReference
@@ -22,25 +29,78 @@ import utilities.Constants
 import utilities.PreferencesManager
 
 class ChatListfragment : Fragment() {
-    private lateinit var usuarios: ArrayList<Usuarios>
-    private lateinit var usuario: Usuarios
+    private lateinit var usuarios: ArrayList<Usuario>
+//    private lateinit var usuario: Usuario
+    private lateinit var usuario: String
+    private lateinit var chats: ArrayList<Chat>
+
+
+
+
+
+
+    //
     private lateinit var userReference: DocumentReference
-    private  var usuariosHablados = ArrayList<Usuarios>()
+    private  var usuariosHablados = ArrayList<Usuario>()
 
     private lateinit var adapter : RecyclerChatLista
     private lateinit var recyclerView : RecyclerView
     lateinit var fragmentChat: ChatFragment
     lateinit var FM: FragmentManager
-    private val db = Firebase.firestore
+//    private val db = Firebase.firestore
 
     private lateinit var userPreferences : PreferencesManager
 
-
+    /**
+     *
+     *
+     *
+     *
+     *
+     * */
+    private val viewModel : ChatListaMVVM by viewModels()
+    /**
+     *
+     *
+     *
+     * */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          FM= requireActivity().supportFragmentManager
+        userPreferences= PreferencesManager(requireActivity())
+        usuario=userPreferences.getString(Constants.EMAIL)!!
+        setObservers()
 
 
+    }
+
+    private fun setObservers() {
+        viewModel.userReference.observe(this, Observer {
+            userReference=it
+            initRecycler()
+        })
+
+        viewModel.chats.observe(this, Observer {
+            chats= it as ArrayList<Chat>
+            var users = arrayListOf<String>()
+           for (chat in it )
+           {
+               if(!chat.evento){
+                   for (user in chat.users)
+                   {
+                       if(user!=usuario)
+                           users.add(user)
+                   }
+               }
+           }
+            viewModel.getUsuariosFiltrados(users)
+        })
+
+        viewModel.usuariosFiltrados.observe(this, Observer {
+            adapter = RecyclerChatLista(it as ArrayList<Usuario>,chats  ,this)
+            recyclerView.adapter = adapter
+
+        })
     }
 
     override fun onCreateView(
@@ -50,23 +110,25 @@ class ChatListfragment : Fragment() {
         var V=inflater.inflate(R.layout.fragment_chat_listfragment, container, false)
         recyclerView = V.findViewById(R.id.recyclerChatList)
         initActionBar(V)
-        userPreferences= PreferencesManager(requireActivity())
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        viewModel.getUserReference(usuario)
 
-        for (hablado in usuarios){
-            for(chat in usuario.getChats())
-                if(chat.users.contains(hablado.getEmail()) && hablado.getEmail() != usuario.getEmail() && chat.users.size==2)
+
+        /*for (hablado in usuarios){
+            for(chat in usuario.chats)
+                if(chat.users.contains(hablado.email) && hablado.email != usuario.email && chat.users.size==2)
                     usuariosHablados.add(hablado)
-        }
+        }*/
 
-        initRecycler()
+//        initRecycler()
         return V
     }
 
-    companion object {
+    /*companion object {
 
         @JvmStatic fun newInstance(
-            param1: ArrayList<Usuarios>,
-            param2: Usuarios,
+            param1: ArrayList<Usuario>,
+            param2: Usuario,
             userReference: DocumentReference
         ) =
             ChatListfragment().apply {
@@ -74,13 +136,18 @@ class ChatListfragment : Fragment() {
                 this.usuario = param2
                 this.userReference = userReference
             }
-    }
+    }*/
 
     private fun initRecycler() {
 
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        viewModel.getChatsUsuario(userReference)
 
-        adapter = RecyclerChatLista(usuarios,usuario.getChats()  ,this)
+
+
+
+       /* recyclerView.layoutManager = LinearLayoutManager(activity)
+
+        adapter = RecyclerChatLista(usuarios,usuario.chats  ,this)
 
         recyclerView.adapter = adapter
 
@@ -90,37 +157,39 @@ class ChatListfragment : Fragment() {
                 if(error==null)
                 {
                     chats?.let {
-                        this.usuario.setChats( it.toObjects(Chat::class.java) as ArrayList<Chat>)
+                        this.usuario.chats= it.toObjects(Chat::class.java) as ArrayList<Chat>
                         usuariosHablados= arrayListOf()
                         for (hablado in usuarios){
-                            for(chat in this.usuario.getChats())
-                                if(chat.users.contains(hablado.getEmail()) && hablado.getEmail() != this.usuario.getEmail())
+                            for(chat in this.usuario.chats)
+                                if(chat.users.contains(hablado.email) && hablado.email != this.usuario.email)
                                     usuariosHablados.add(hablado)
                         }
                         if(usuariosHablados.size==0){
-                            adapter = RecyclerChatLista(usuarios,usuario.getChats()  ,this)
+                            adapter = RecyclerChatLista(usuarios,usuario.chats  ,this)
 
                         }
-                        else adapter = RecyclerChatLista(usuarios,usuario.getChats()  ,this)
+                        else adapter = RecyclerChatLista(usuarios,usuario.chats  ,this)
                         recyclerView.adapter = adapter
                     }
                 }
             }
 
 
-
+*/
 
             }
 
+
+
     fun replaceFragment(chatGrupo: Chat) {
-        fragmentChat = ChatFragment.newInstance(usuario,chatGrupo)
+        fragmentChat = ChatFragment.newInstance(usuario,chatGrupo,chats)
         val FT: FragmentTransaction = FM.beginTransaction()
         FT.replace(R.id.fragment, fragmentChat)
         FT.commit()
     }
 
 
-    fun replaceFragment(usuarioIr: Usuarios) {
+    fun replaceFragment(usuarioIr: Usuario) {
         fragmentChat = ChatFragment.newInstance(usuario,usuarioIr)
         val FT: FragmentTransaction = FM.beginTransaction()
         FT.replace(R.id.fragment, fragmentChat)
@@ -132,12 +201,12 @@ class ChatListfragment : Fragment() {
         V.findViewById<BottomNavigationView>(R.id.bottom_navigationChat).setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.home -> {
-                    startActivity(Intent(requireActivity(),MainActivity::class.java))
+                    startActivity(Intent(requireActivity(), MainActivity::class.java))
                     true
                 }
                 R.id.perfil -> {
                     userPreferences = PreferencesManager(requireActivity())
-                    startActivity(Intent(requireActivity(),Perfil::class.java).apply {
+                    startActivity(Intent(requireActivity(), Perfil::class.java).apply {
 
                         putExtra(Constants.EMAIL,userPreferences.getString(Constants.EMAIL))
                         putExtra(Constants.USERPHOTO,userPreferences.getString(Constants.USERPHOTO))

@@ -78,4 +78,11 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
 
 
+
+    ///MVVM
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+
 }

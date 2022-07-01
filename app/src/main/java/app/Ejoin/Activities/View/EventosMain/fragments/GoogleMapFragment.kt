@@ -1,4 +1,4 @@
-package app.Ejoin.Activities
+package app.Ejoin.Activities.View.EventosMain.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,7 +13,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import app.Ejoin.DataClasses.Evento
+import app.Ejoin.Activities.View.DatosEventos
+import app.Ejoin.DataClasses.EventoData
 import app.Ejoin.R
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -27,7 +28,7 @@ import utilities.Constants
 import java.util.function.Consumer
 
 class GoogleMapFragment : Fragment(), GoogleMap.OnInfoWindowClickListener {
-    private lateinit var eventos: ArrayList<Evento>
+    private lateinit var eventos: ArrayList<EventoData>
 private lateinit var mapa : GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,18 +104,18 @@ private lateinit var mapa : GoogleMap
     }
 
     companion object {
-        @JvmStatic fun newInstance(param1: ArrayList<Evento>) =
+        @JvmStatic fun newInstance(param1: ArrayList<EventoData>) =
             GoogleMapFragment().apply {
                 eventos=param1
             }
     }
 
-    private fun generarMarker(evento: Evento,map : GoogleMap) {
-        val position = LatLng(evento.getCordenada().latitude, evento.getCordenada().longitude)
+    private fun generarMarker(evento: EventoData,map : GoogleMap) {
+        val position = LatLng(evento.cordenada.latitude, evento.cordenada.longitude)
         map.addMarker(
             MarkerOptions()
                 .position(position)
-                .icon(BitmapDescriptorFactory.fromResource(setIcon(evento.getCategoria())))
+                .icon(BitmapDescriptorFactory.fromResource(setIcon(evento.categoria)))
 
         )!!.tag = evento
 
@@ -131,25 +132,25 @@ private lateinit var mapa : GoogleMap
     }
 
     override fun onInfoWindowClick(p0: Marker) {
-        var evento = p0.tag as Evento
+        var evento = p0.tag as EventoData
        requireActivity().startActivity(Intent(requireActivity(), DatosEventos::class.java).apply {
-            putExtra(Constants.EVENTOID,evento.getId())
-            putExtra(Constants.NOMBREVENTO,evento.getNombreEvento())
-            putExtra(Constants.EMAIL,evento.getEmpresa())
-            putExtra(Constants.FECHA,evento.getFecha())
-            putExtra(Constants.CATEGORIA,evento.getCategoria())
-            putExtra(Constants.DETALLES,evento.getDetalles())
-            putExtra(Constants.PRECIO,evento.getPrecio())
-            putExtra(Constants.LUGAR,evento.getLugar())
-            putExtra(Constants.ALTITUD,evento.getCordenada().latitude)
-            putExtra(Constants.LONGITUD,evento.getCordenada().longitude)
-            putExtra(Constants.MAXUSUARIOS,evento.getMaxUsuarios())
-            putExtra(Constants.USUARIOS,evento.getusuarios())
-            putExtra(Constants.USERPHOTO,evento.getPhoto())
+            putExtra(Constants.EVENTOID,evento.id)
+            putExtra(Constants.NOMBREVENTO,evento.nombreEvento)
+            putExtra(Constants.EMAIL,evento.empresa)
+            putExtra(Constants.FECHA,evento.fecha)
+            putExtra(Constants.CATEGORIA,evento.categoria)
+            putExtra(Constants.DETALLES,evento.detalles)
+            putExtra(Constants.PRECIO,evento.precio)
+            putExtra(Constants.LUGAR,evento.lugar)
+            putExtra(Constants.ALTITUD,evento.cordenada.latitude)
+            putExtra(Constants.LONGITUD,evento.cordenada.longitude)
+            putExtra(Constants.MAXUSUARIOS,evento.maxUsuarios)
+            putExtra(Constants.USUARIOS,evento.usuarios)
+            putExtra(Constants.USERPHOTO,evento.photo)
         })
     }
 
-     fun filtrarMapa( eventos : ArrayList<Evento>){
+     fun filtrarMapa( eventos : ArrayList<EventoData>){
         mapa?.clear()
         eventos.forEach(Consumer { x->
             generarMarker( x,mapa)

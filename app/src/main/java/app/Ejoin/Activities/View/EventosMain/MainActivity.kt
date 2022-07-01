@@ -1,28 +1,29 @@
-package app.Ejoin.Activities
+package app.Ejoin.Activities.View.EventosMain
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.CheckBox
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import app.Ejoin.Adapter.RecyclerEventos
+import app.Ejoin.Activities.View.Chat.ChatActivity
+import app.Ejoin.Activities.FilterActivity
+import app.Ejoin.Activities.View.AddEvent
+import app.Ejoin.Activities.View.EventosMain.fragments.EventFragment
+import app.Ejoin.Activities.View.EventosMain.fragments.GoogleMapFragment
+import app.Ejoin.Activities.View.Perfil
+import app.Ejoin.Activities.ViewModel.EventosViewModel
 import app.Ejoin.Adapter.RecyclerFiltro
-import app.Ejoin.DataClasses.Evento
+import app.Ejoin.DataClasses.EventoData
 import app.Ejoin.DataClasses.Filtros
 import app.Ejoin.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import utilities.Constants
@@ -34,15 +35,14 @@ import utilities.PreferencesManager
 *  */
 
 class MainActivity : AppCompatActivity() {
-    //navegacion
-    private lateinit var navView: NavigationView
-    private lateinit var auth: FirebaseAuth
+
+    private var fragmentoUsadoMapa = false
     //preferences
     private lateinit var userPreferences : PreferencesManager
 
     //variables destinadas a obtener datos
     private val db = Firebase.firestore
-    var eventos : MutableList<Evento> = mutableListOf()
+    var eventos : MutableList<EventoData> = mutableListOf()
 
     //gestion de fragmentos
     val FM: FragmentManager = supportFragmentManager
@@ -53,17 +53,30 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter : RecyclerFiltro
     private lateinit var recyclerView : RecyclerView
 
+    private var firstCharge = true
+    var filtro = Filtros()
     //new Event
     private lateinit var addEvent : ExtendedFloatingActionButton
-
+    /**
+     *
+     *
+     *
+     *
+     *
+     * */
+    private val viewModel : EventosViewModel by viewModels()
+    /**
+     *
+     *
+     *
+     * */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        auth = Firebase.auth
+
         initActionBar()
-        cargarEventos()
         userPreferences = PreferencesManager(this)
            if(userPreferences.getBoolean(Constants.ESEMPRESA)) {
             addEvent = findViewById(R.id.addEvent)
@@ -72,6 +85,25 @@ class MainActivity : AppCompatActivity() {
                 añadirEvento()
             }
         }
+
+        cargarEventos()
+        viewModel.eventos.observe(this, Observer {
+            eventos=it
+            if(firstCharge){
+                initControlFragments()
+                firstCharge=false
+            }
+            else {
+                if(fragmentoUsadoMapa)
+                    (FM.fragments[0] as GoogleMapFragment).filtrarMapa(eventos  as ArrayList<EventoData>)
+                else {
+                    (FM.fragments[0] as EventFragment).filtrarMapa(eventos  as ArrayList<EventoData>)
+                }
+
+            }
+
+        })
+
 
     }
     
@@ -85,12 +117,12 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.chat -> {
-                    startActivity(Intent(this,ChatActivity::class.java))
+                    startActivity(Intent(this, ChatActivity::class.java))
                     true
                 }
                 R.id.perfil -> {
                     userPreferences = PreferencesManager(this)
-                    startActivity(Intent(this,Perfil::class.java).apply {
+                    startActivity(Intent(this, Perfil::class.java).apply {
 
                         putExtra(Constants.EMAIL,userPreferences.getString(Constants.EMAIL))
                         putExtra(Constants.USERPHOTO,userPreferences.getString(Constants.USERPHOTO))
@@ -105,41 +137,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     private fun cargarEventos() {
-
-        eventos.clear()
-
-        db.collection(Constants.EVENTOSDB).get()
-            .addOnSuccessListener {
-                for (doc in it.documents){
-                    var evento : Evento = Evento(doc.id,
-                        doc.get("nombreEvento") as String,
-                        doc.get("empresa") as String,
-                        doc.get("fecha") as String,
-                        doc.get("categoria") as String,
-                        doc.get("detalles") as String,
-                        doc.get("precio") as Number,
-                        doc.get("lugar") as String,
-                        doc.get("cordenada") as GeoPoint,
-                        doc.get("maxUsuarios") as Number,
-                        doc.get("usuarios") as ArrayList<String>,
-                        doc.getString(Constants.USERPHOTO) as String
-                    )
-                    eventos.add(evento)
-                }
-
-                initControlFragments()
-
-
-
-            }
+        viewModel.getEventos()
     }
 
     private fun initControlFragments() {
-         googleMapFragment = GoogleMapFragment.newInstance(eventos as ArrayList<Evento>)
-        fragmentEvento= EventFragment.newInstance(eventos as ArrayList<Evento>)
+         googleMapFragment = GoogleMapFragment.newInstance(eventos as ArrayList<EventoData>)
+        fragmentEvento= EventFragment.newInstance(eventos as ArrayList<EventoData>)
         val FT: FragmentTransaction = FM.beginTransaction()
         FT.add(R.id.fragment, fragmentEvento)
         FT.commit()
@@ -152,6 +156,7 @@ class MainActivity : AppCompatActivity() {
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             adapter = RecyclerFiltro( ArrayList<String>())
             recyclerView.adapter = adapter
+            fragmentoUsadoMapa = true
         }
         findViewById<Button>(R.id.botonEvento).setOnClickListener{
 
@@ -160,8 +165,9 @@ class MainActivity : AppCompatActivity() {
             FT.commit()
 
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            adapter = RecyclerFiltro( ArrayList<String>())
+            adapter = RecyclerFiltro( ArrayList())
             recyclerView.adapter = adapter
+            fragmentoUsadoMapa = false
 
         }
 
@@ -169,7 +175,7 @@ class MainActivity : AppCompatActivity() {
          recyclerView =findViewById(R.id.recyclerFiltros)
 
         findViewById<Button>(R.id.filtros).setOnClickListener{
-          startActivityForResult(Intent(this,FilterActivity::class.java),1)
+          startActivityForResult(Intent(this, FilterActivity::class.java),1)
 
 
         }
@@ -179,8 +185,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var eventosFilt : MutableList<Evento> = mutableListOf()
-        var filtro = Filtros()
+        adapter = RecyclerFiltro( ArrayList())
+        recyclerView.adapter = adapter
+        filtrar(data)
+
+    }
+
+    fun filtrar(data: Intent?) {
+        var eventosFilt : MutableList<EventoData> = mutableListOf()
         filtro.deportesFilt= data?.extras?.get("deportes") as Boolean
         filtro.ocioFilt= data?.extras?.get("ocio") as Boolean
         filtro.musicaFilt= data?.extras?.get("musica") as Boolean
@@ -202,31 +214,38 @@ class MainActivity : AppCompatActivity() {
         eventos.forEach {x->
             var añadir = true
 
-                if(filtro.deportesFilt && x.getCategoria()!="DEPORTES")
-                    añadir = false
+            if(filtro.deportesFilt && x.categoria!="DEPORTES")
+                añadir = false
 
-                if(filtro.ocioFilt && x.getCategoria()!="OCIO")
-                 añadir = false
-            if( filtro.estudiosFilt && x.getCategoria()!="ESTUDIO")
-                    añadir = false
-            if( filtro.musicaFilt && x.getCategoria()!="MUSICA")
+            if(filtro.ocioFilt && x.categoria!="OCIO")
                 añadir = false
-            if(  filtro.disponibleFilt && x.getusuarios().size>=x.getMaxUsuarios().toInt())
-             añadir = false
-            if(  filtro.precioFilt && x.getPrecio().toFloat()>filtro.valorMaxPrecio)
+            if( filtro.estudiosFilt && x.categoria!="ESTUDIO")
                 añadir = false
-            if(filtro.diaCambio && x.getFecha()!= (filtro.dia.toString() + "/"+filtro.mes.toString()))
+            if( filtro.musicaFilt && x.categoria!="MUSICA")
+                añadir = false
+            if(  filtro.disponibleFilt && x.usuarios.size>=x.maxUsuarios.toInt())
+                añadir = false
+            if(  filtro.precioFilt && x.precio.toFloat()>filtro.valorMaxPrecio)
+                añadir = false
+            if(filtro.diaCambio && x.fecha!= (filtro.dia.toString() + "/"+filtro.mes.toString()))
                 añadir = false
 
             if (añadir)
                 eventosFilt.add(x)
         }
-        if(FM.fragments[0] is GoogleMapFragment)
-            (FM.fragments[0] as GoogleMapFragment).filtrarMapa(eventosFilt as ArrayList<Evento>)
-        else {
-            (FM.fragments[0] as EventFragment).filtrarMapa(eventosFilt as ArrayList<Evento>)
+        if(fragmentoUsadoMapa)
+        {
+            for(fragment in FM.fragments){
+                if (fragment is GoogleMapFragment)
+                    fragment.filtrarMapa(eventosFilt as ArrayList<EventoData>)
+            }
         }
-
+        else {
+            for(fragment in FM.fragments){
+                if (fragment is EventFragment)
+                    fragment.filtrarMapa(eventosFilt as ArrayList<EventoData>)
+            }
+        }
     }
 
     private fun crearRecyclerFiltros(filtro: Filtros) {
@@ -261,7 +280,7 @@ class MainActivity : AppCompatActivity() {
     }
 
      private fun añadirEvento() {
-         startActivity(Intent(this,AddEvent::class.java)
+         startActivity(Intent(this, AddEvent::class.java)
              .apply {
                  putExtra(Constants.EMAIL,userPreferences.getString(Constants.EMAIL))
              }

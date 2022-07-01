@@ -1,4 +1,4 @@
-package app.Ejoin.Activities
+package app.Ejoin.Activities.View.EventosMain.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.Ejoin.Adapter.RecyclerEventos
-import app.Ejoin.DataClasses.Evento
+import app.Ejoin.DataClasses.EventoData
 import app.Ejoin.R
 
 class EventFragment : Fragment() {
-    private lateinit var eventos: ArrayList<Evento>
+    private lateinit var eventos: ArrayList<EventoData>
     private lateinit var adapter : RecyclerEventos
     private lateinit var recyclerView : RecyclerView
 
@@ -30,7 +30,7 @@ class EventFragment : Fragment() {
 
     companion object {
 
-        @JvmStatic fun newInstance(param1: ArrayList<Evento>) =
+        @JvmStatic fun newInstance(param1: ArrayList<EventoData>) =
             EventFragment().apply {
                 this.eventos=param1
             }
@@ -39,11 +39,11 @@ class EventFragment : Fragment() {
     private fun initRecycler() {
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerEventos(requireActivity(),eventos as ArrayList<Evento>)
+        adapter = RecyclerEventos(requireActivity(),eventos as ArrayList<EventoData>)
         recyclerView.adapter = adapter
     }
 
-    fun filtrarMapa( eventos : ArrayList<Evento>){
+    fun filtrarMapa( eventos : ArrayList<EventoData>){
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
         adapter = RecyclerEventos(requireActivity(),eventos )

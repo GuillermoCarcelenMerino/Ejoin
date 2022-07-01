@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ejoin">
         <activity
-            android:name=".Activities.AddEvent"
+            android:name=".Activities.View.AddEvent"
             android:exported="true" />
         <activity
             android:name=".Activities.PasarelaPago"
@@ -31,6 +31,7 @@
         <activity
             android:name=".Activities.FilterActivity"
             android:exported="true" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -45,24 +46,21 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".Activities.ChatActivity"
+            android:name=".Activities.View.Chat.ChatActivity"
             android:exported="true"
             android:label="@string/title_activity_chat"
             android:theme="@style/Theme.Ejoin.NoActionBar" />
         <activity
-            android:name=".Activities.Perfil"
+            android:name=".Activities.View.Perfil"
             android:exported="true" />
         <activity
-            android:name=".Activities.EmpresaActivity"
+            android:name=".Activities.View.DatosEventos"
             android:exported="true" />
         <activity
-            android:name=".Activities.DatosEventos"
+            android:name=".Activities.View.Register"
             android:exported="true" />
         <activity
-            android:name=".Activities.Register"
-            android:exported="true" />
-        <activity
-            android:name=".Activities.LoginActivity"
+            android:name=".Activities.View.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -71,7 +69,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.View.EventosMain.MainActivity"
             android:exported="true" />
     </application>
 
