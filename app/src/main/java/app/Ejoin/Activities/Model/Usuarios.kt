@@ -15,7 +15,6 @@ import com.google.firebase.storage.ktx.storage
 import utilities.Constants
 
 class Usuarios {
-    private  lateinit var userReference : DocumentReference
     fun getEventosUsuario( usuario : String) :MutableLiveData<MutableList<EventoData>> {
         var mutableData = MutableLiveData<MutableList<EventoData>>()
         FirebaseFirestore.getInstance().collection(Constants.EVENTOSDB).whereArrayContains(Constants.USUARIOS,usuario).get()
@@ -26,9 +25,17 @@ class Usuarios {
         return mutableData
     }
 
-    fun comprobarDatosLogin(email : String,password : String) : MutableLiveData<Usuario>{
-        var mutableUser = MutableLiveData<Usuario>()
+    fun comprobarDatosLogin(email : String,password : String) : MutableLiveData<Boolean>{
+        var logeado = MutableLiveData<Boolean>()
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener {
+          logeado.value=true
+        }.addOnFailureListener {
+            logeado.value=false
+        }
+        return logeado
+    }
+    fun getUser(email : String) : MutableLiveData<Usuario> {
+        var mutableUser = MutableLiveData<Usuario>()
             FirebaseFirestore.getInstance().collection(Constants.USERBD).
             whereEqualTo(Constants.EMAIL,email)
                 .get()
@@ -36,7 +43,7 @@ class Usuarios {
                     var usuario : Usuario= it.documents[0].toObject(Usuario::class.java)!!
                     mutableUser.value = usuario
                 }
-        }
+
         return mutableUser
     }
 
@@ -53,7 +60,6 @@ class Usuarios {
                     else {
                         usado.value= true
                     }
-
                 }
         return  usado
 
@@ -64,16 +70,11 @@ class Usuarios {
         var auth=  FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(usuario.email, password)
             .addOnSuccessListener { task ->
-
-
-
                 var storage = Firebase.storage
-
                 val storageRef = storage.reference
                 var file = uri
                 val riversRef = storageRef.child("usuarios/"+usuario.email)
                 var uploadTask = riversRef.putFile(file!!)
-
                 // Register observers to listen for when the download is done or if it fails
                 uploadTask.addOnSuccessListener { taskSnapshot ->
 
@@ -88,9 +89,7 @@ class Usuarios {
                             .addOnFailureListener { e ->
                                 registrado.value=false
                             }
-
                     }}
-
 
             }.addOnFailureListener {
                 registrado.value=false
@@ -152,6 +151,25 @@ class Usuarios {
             }
         return chats
     }
+    fun checkMail(email : String) : MutableLiveData<Boolean>{
+        var existe = MutableLiveData<Boolean>()
+        FirebaseFirestore.getInstance().collection(Constants.USERBD).
+        whereEqualTo(Constants.EMAIL,email)
+            .get()
+            .addOnSuccessListener {
+                if (it.documents.isEmpty()){
+                    existe.value=false
+                }
+                else {
+                    existe.value= true
+                }
+
+            }
+        return  existe
+
+    }
+
+
 
     }
 

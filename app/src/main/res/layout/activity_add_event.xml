@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.View.AddEvent">
+    tools:context=".Activities.View.AddEvent"
+    android:background="@drawable/backgroundlogin">
 
     <RelativeLayout
         android:id="@+id/relativeLayout3"
@@ -37,7 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="#576F72"
+        android:backgroundTint="#576F72"
+        android:textColorHint="#576F72"
         android:textStyle="bold"
         android:hint="Añada nombre Evento"
         android:layout_marginTop="20dp"
@@ -64,7 +67,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
-                android:hint="Añada Dirección" />
+                android:hint="Añada Dirección"
+                android:textColor="#576F72"
+                android:backgroundTint="#576F72"
+                android:textColorHint="#576F72"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -88,13 +94,17 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
                     android:hint="12"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:textColor="#576F72"
+                    android:backgroundTint="#576F72"
+                    android:textColorHint="#576F72"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mes :"
-                    android:textColor="@color/black"
+                    android:textColor="#576F72"
+                    android:backgroundTint="#576F72"
                     android:textStyle="bold" />
 
                 <EditText
@@ -104,7 +114,10 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
                     android:hint="02"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:textColor="#576F72"
+                    android:backgroundTint="#576F72"
+                    android:textColorHint="#576F72"/>
 
 
             </LinearLayout>
@@ -115,7 +128,9 @@
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:text="Categoria"
-                android:textColor="@color/black"/>
+                android:textColor="#576F72"
+                android:backgroundTint="#576F72"
+                android:textColorHint="#576F72"/>
             <Spinner
                 android:id="@+id/addCategoria"
                 android:layout_width="wrap_content"
@@ -141,7 +156,11 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:hint="Añada precio en €"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:textColor="#576F72"
+                android:backgroundTint="#576F72"
+                android:textColorHint="#576F72"
+                />
 
             <EditText
                 android:id="@+id/addMaxUsuarios"
@@ -151,6 +170,9 @@
                 android:layout_marginTop="20dp"
                 android:hint="Añada maxUsuarios"
                 android:inputType="number"
+                android:textColor="#576F72"
+                android:backgroundTint="#576F72"
+                android:textColorHint="#576F72"
                 />
 
             <LinearLayout
@@ -165,7 +187,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Latitud :"
-                    android:textColor="@color/black"
+                    android:textColor="#576F72"
+                    android:backgroundTint="#576F72"
                     android:textStyle="bold" />
 
                 <EditText
@@ -175,6 +198,9 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
                     android:hint="Latitud"
+                    android:textColor="#576F72"
+                    android:backgroundTint="#576F72"
+                    android:textColorHint="#576F72"
                     android:inputType="numberDecimal"/>
 
             </LinearLayout>
@@ -191,7 +217,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Longitud :"
-                    android:textColor="@color/black"
+                    android:textColor="#576F72"
+                    android:backgroundTint="#576F72"
                     android:textStyle="bold" />
 
                 <EditText
@@ -216,7 +243,8 @@
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:text="DESCRIPCION"
-        android:textColor="@color/black"
+        android:textColor="#576F72"
+        android:backgroundTint="#576F72"
         android:textSize="14dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -231,6 +259,9 @@
         android:layout_marginBottom="10dp"
         android:gravity="center_horizontal"
         android:hint="Añada una descripcion"
+        android:textColor="#576F72"
+        android:backgroundTint="#576F72"
+        android:textColorHint="#576F72"
         android:paddingTop="10dp"
         app:layout_constraintBottom_toTopOf="@+id/AñadirEvento"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
@@ -241,7 +272,8 @@
         android:id="@+id/AñadirEvento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#0219DC"
+        android:backgroundTint="#576F72"
+        android:textColor="#E4DCCF"
         android:text="AÑADIR EVENTO"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="10dp"/>

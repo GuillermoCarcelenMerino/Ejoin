@@ -61,19 +61,12 @@ class RecyclerChatLista (private val dataSet: ArrayList<Usuario>, private val ch
             }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() : Int {
 
             return chats.size
 
     }
 
-
-    /*
-    * TODO Incluir informacion en intent para evitar realizar busquedas nuevas en firebase sobre el evento a analizar
-    *  Añadir boton para busqueda en mapa
-    *
-    * */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imagenChat : CircularImageView
         val nombreChat : TextView

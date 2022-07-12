@@ -5,23 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.View.Perfil"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/backgroundlogin">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarPerfil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <Button
-        android:id="@+id/chatButton"
-        android:layout_margin="20dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/chat"
-        app:backgroundTint="@color/black"
-        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:itemIconTint="#F0EBE3"
+        android:background="#576F72" />
+
+
 
     <LinearLayout
         android:id="@+id/linearPerfil"
@@ -29,7 +24,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/toolbarPerfil">
+        app:layout_constraintTop_toTopOf="@id/toolbarPerfil"
+        android:layout_marginTop="60dp">
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/fotoPerfilAjustes"
@@ -49,7 +45,7 @@
             android:layout_marginTop="30dp"
             android:text="Name"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="#576F72"
             android:textSize="14dp" />
 
         <TextView
@@ -59,7 +55,7 @@
             android:layout_marginTop="30dp"
             android:text="Correo@gmail.com"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="#576F72"
             android:textSize="14dp" />
 
         <TextView
@@ -68,7 +64,7 @@
             android:layout_marginTop="30dp"
             android:text="EVENTOS PARTICIPADOS"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="#576F72"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -77,10 +73,11 @@
         android:id="@+id/eventosParticipados"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#D5D5D5"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/linearPerfil"
-        android:layout_marginTop="10dp"/>
+        android:background="#F0EBE3"
+        android:elevation="20dp"
+        android:layout_marginTop="50dp"/>
 
     <RelativeLayout
         android:id="@+id/relativeLayout2"
@@ -93,6 +90,9 @@
             android:id="@+id/bottom_navigationPerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#576F72"
+            app:itemIconTint="#F0EBE3"
+            app:itemTextColor="#F0EBE3"
             app:menu="@menu/navigation_menu" />
 
     </RelativeLayout>

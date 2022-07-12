@@ -3,6 +3,7 @@ package app.Ejoin.Activities.View
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
@@ -110,7 +111,7 @@ class Register : AppCompatActivity() {
 
     private fun checkuserName() {
         if (!nombre.text.toString().equals("")) {
-            findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.BLACK)
+            findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.parseColor("#054ADF"))
 
             viewModel.comprobarDatosLogin(nombre.text.toString())
         }else {
@@ -125,7 +126,7 @@ class Register : AppCompatActivity() {
         {
             findViewById<TextView>(R.id.correoRegisterTextView).setTextColor(Color.RED)
             canBeSaved = false
-        } else findViewById<TextView>(R.id.correoRegisterTextView).setTextColor(Color.BLACK)
+        } else findViewById<TextView>(R.id.correoRegisterTextView).setTextColor(Color.parseColor("#054ADF"))
         if (!password.text.toString().equals(password2.text.toString())) {
             canBeSaved = false
             findViewById<TextView>(R.id.incorrectPasswordRegis).text =
@@ -134,11 +135,11 @@ class Register : AppCompatActivity() {
         if (password.text.toString().equals("") || password.text.length < 6) {
             canBeSaved = false
             findViewById<TextView>(R.id.passwordRegisterTextView).setTextColor(Color.RED)
-        } else findViewById<TextView>(R.id.passwordRegisterTextView).setTextColor(Color.BLACK)
+        } else findViewById<TextView>(R.id.passwordRegisterTextView).setTextColor(Color.parseColor("#054ADF"))
         if (password2.text.toString().equals("")) {
             canBeSaved = false
             findViewById<TextView>(R.id.password2RegisterTextView).setTextColor(Color.RED)
-        } else findViewById<TextView>(R.id.password2RegisterTextView).setTextColor(Color.BLACK)
+        } else findViewById<TextView>(R.id.password2RegisterTextView).setTextColor(Color.parseColor("#054ADF"))
         if (!fotoSel) {
             canBeSaved = false
             Toast.makeText(this, "SELECIONA UNA FOTO DE PERFIL", Toast.LENGTH_LONG).show()

@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
@@ -29,51 +31,23 @@ import utilities.Constants
 import utilities.PreferencesManager
 
 class ChatListfragment : Fragment() {
-    private lateinit var usuarios: ArrayList<Usuario>
-//    private lateinit var usuario: Usuario
     private lateinit var usuario: String
     private lateinit var chats: ArrayList<Chat>
-
-
-
-
-
-
-    //
+    private lateinit var usuariosFilt: ArrayList<Usuario>
     private lateinit var userReference: DocumentReference
-    private  var usuariosHablados = ArrayList<Usuario>()
-
     private lateinit var adapter : RecyclerChatLista
     private lateinit var recyclerView : RecyclerView
     lateinit var fragmentChat: ChatFragment
     lateinit var FM: FragmentManager
-//    private val db = Firebase.firestore
-
     private lateinit var userPreferences : PreferencesManager
-
-    /**
-     *
-     *
-     *
-     *
-     *
-     * */
     private val viewModel : ChatListaMVVM by viewModels()
-    /**
-     *
-     *
-     *
-     * */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          FM= requireActivity().supportFragmentManager
         userPreferences= PreferencesManager(requireActivity())
         usuario=userPreferences.getString(Constants.EMAIL)!!
         setObservers()
-
-
     }
-
     private fun setObservers() {
         viewModel.userReference.observe(this, Observer {
             userReference=it
@@ -97,6 +71,7 @@ class ChatListfragment : Fragment() {
         })
 
         viewModel.usuariosFiltrados.observe(this, Observer {
+            usuariosFilt= it as ArrayList<Usuario>
             adapter = RecyclerChatLista(it as ArrayList<Usuario>,chats  ,this)
             recyclerView.adapter = adapter
 
@@ -108,78 +83,36 @@ class ChatListfragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var V=inflater.inflate(R.layout.fragment_chat_listfragment, container, false)
+        V.findViewById<EditText>(R.id.buscarUser).doOnTextChanged { text, start, before, count ->
+            filtUsers(text)
+        }
         recyclerView = V.findViewById(R.id.recyclerChatList)
         initActionBar(V)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         viewModel.getUserReference(usuario)
-
-
-        /*for (hablado in usuarios){
-            for(chat in usuario.chats)
-                if(chat.users.contains(hablado.email) && hablado.email != usuario.email && chat.users.size==2)
-                    usuariosHablados.add(hablado)
-        }*/
-
-//        initRecycler()
         return V
     }
 
-    /*companion object {
+    private fun filtUsers(text: CharSequence?) {
 
-        @JvmStatic fun newInstance(
-            param1: ArrayList<Usuario>,
-            param2: Usuario,
-            userReference: DocumentReference
-        ) =
-            ChatListfragment().apply {
-                this.usuarios=param1
-                this.usuario = param2
-                this.userReference = userReference
-            }
-    }*/
+        if(text!=""){
+            var chatsFilt = chats.filter { x-> x.nombre.contains(text.toString()) }
+            adapter = RecyclerChatLista(usuariosFilt,chatsFilt as ArrayList<Chat>  ,this)
+            recyclerView.adapter = adapter
+        }
+        else{
+            adapter = RecyclerChatLista(usuariosFilt  ,chats  ,this)
+            recyclerView.adapter = adapter
+        }
+
+
+    }
 
     private fun initRecycler() {
 
         viewModel.getChatsUsuario(userReference)
 
-
-
-
-       /* recyclerView.layoutManager = LinearLayoutManager(activity)
-
-        adapter = RecyclerChatLista(usuarios,usuario.chats  ,this)
-
-        recyclerView.adapter = adapter
-
-
-            userReference.collection("chats")
-            .addSnapshotListener { chats, error ->
-                if(error==null)
-                {
-                    chats?.let {
-                        this.usuario.chats= it.toObjects(Chat::class.java) as ArrayList<Chat>
-                        usuariosHablados= arrayListOf()
-                        for (hablado in usuarios){
-                            for(chat in this.usuario.chats)
-                                if(chat.users.contains(hablado.email) && hablado.email != this.usuario.email)
-                                    usuariosHablados.add(hablado)
-                        }
-                        if(usuariosHablados.size==0){
-                            adapter = RecyclerChatLista(usuarios,usuario.chats  ,this)
-
-                        }
-                        else adapter = RecyclerChatLista(usuarios,usuario.chats  ,this)
-                        recyclerView.adapter = adapter
-                    }
-                }
             }
-
-
-*/
-
-            }
-
-
 
     fun replaceFragment(chatGrupo: Chat) {
         fragmentChat = ChatFragment.newInstance(usuario,chatGrupo,chats)
@@ -187,7 +120,6 @@ class ChatListfragment : Fragment() {
         FT.replace(R.id.fragment, fragmentChat)
         FT.commit()
     }
-
 
     fun replaceFragment(usuarioIr: Usuario) {
         fragmentChat = ChatFragment.newInstance(usuario,usuarioIr)

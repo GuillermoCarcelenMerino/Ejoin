@@ -16,5 +16,4 @@ class EventosViewModel : ViewModel() {
                 eventos-> this.eventos.value=eventos
         }
     }
-
 }

@@ -29,58 +29,40 @@ import java.util.function.Consumer
 
 class GoogleMapFragment : Fragment(), GoogleMap.OnInfoWindowClickListener {
     private lateinit var eventos: ArrayList<EventoData>
-private lateinit var mapa : GoogleMap
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var mapa : GoogleMap
 
     @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { googleMap ->
         mapa = googleMap
-
         googleMap.isMyLocationEnabled = false
-        val sydney = LatLng(-34.0, 151.0)
 
         when {
             ContextCompat.checkSelfPermission(
                 requireActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED -> {
-                // You can use the API that requires the permission.
                 googleMap.isMyLocationEnabled = true
                 googleMap.uiSettings.isMyLocationButtonEnabled=true
             }
 
-
             shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected. In this UI,
-                // include a "cancel" or "no thanks" button that allows the user to
-                // continue using your app without granting the permission.
-                requireActivity().requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+
+            requireActivity().requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
             }
             else -> {
-                // You can directly ask for the permission.
-                // The registered ActivityResultCallback gets the result of this request.
                 requireActivity().requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
             }
         }
         eventos.forEach(Consumer { x->
             generarMarker( x,googleMap)
         })
-
         googleMap.setInfoWindowAdapter(ventanaGoogle(requireActivity()))
         googleMap.setOnInfoWindowClickListener(this);
-
-
-
         googleMap.setMinZoomPreference(3.0f)
         googleMap.setMaxZoomPreference(14.0f)
         googleMap.uiSettings.isZoomControlsEnabled=true
         googleMap.uiSettings.isCompassEnabled=true
         googleMap.uiSettings.isZoomGesturesEnabled=true
-
 
     }
 

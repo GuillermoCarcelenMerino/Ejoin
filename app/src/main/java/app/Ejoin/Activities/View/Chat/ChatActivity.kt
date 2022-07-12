@@ -26,31 +26,18 @@ class ChatActivity : AppCompatActivity() {
     private val db = Firebase.firestore
     var usuarios : MutableList<Usuario> = mutableListOf()
     private  lateinit var  usuario : Usuario
-    private  lateinit var userReference : DocumentReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-
-
-
         userPreferences = PreferencesManager(this)
-
-            usuario= Usuario()
-                usuario.email=userPreferences.getString(Constants.EMAIL)!!
-               usuario.photo= userPreferences.getString(Constants.USERPHOTO)!!
-                usuario.name =userPreferences.getString(Constants.NOMBREUSUARIO)!!
-                usuario.esEmpresa=userPreferences.getBoolean(Constants.ESEMPRESA)
-
+        usuario= Usuario()
+        usuario.email=userPreferences.getString(Constants.EMAIL)!!
+        usuario.photo= userPreferences.getString(Constants.USERPHOTO)!!
+        usuario.name =userPreferences.getString(Constants.NOMBREUSUARIO)!!
+        usuario.esEmpresa=userPreferences.getBoolean(Constants.ESEMPRESA)
         initControlFragments()
-       // cargarRecycler()
-
-
-
-
     }
-
-
 
     private fun initControlFragments() {
         var datosUsuario=intent.extras
@@ -69,7 +56,6 @@ class ChatActivity : AppCompatActivity() {
             FT.commit()
 
         }
-
         else {
 
             fragmentLista = ChatListfragment()

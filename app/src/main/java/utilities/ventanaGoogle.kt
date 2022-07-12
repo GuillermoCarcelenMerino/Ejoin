@@ -1,6 +1,5 @@
 package utilities
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
 import android.widget.ImageView
@@ -10,6 +9,9 @@ import app.Ejoin.R
 import com.bumptech.glide.Glide
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 
 class ventanaGoogle(context: Activity) : GoogleMap.InfoWindowAdapter {
 
@@ -21,7 +23,7 @@ class ventanaGoogle(context: Activity) : GoogleMap.InfoWindowAdapter {
         TODO("Not yet implemented")
     }
 
-    @SuppressLint("SetTextI18n")
+
     override fun getInfoWindow(p0: Marker): View? {
         var view : View
         view=context.layoutInflater.inflate(R.layout.markerlayout,null)
@@ -31,9 +33,15 @@ class ventanaGoogle(context: Activity) : GoogleMap.InfoWindowAdapter {
         view.findViewById<TextView>(R.id.bubble_title).text=evento.precio.toString()
 
         var image= view.findViewById<ImageView>(R.id.bubble_image)
-        Glide.with(context )
-            .load(evento.photo)
-            .into(image)
+
+        runBlocking {
+         var cargar= async {
+              Glide.with(context)
+                  .load(evento.photo)
+                  .into(image)
+          }
+        cargar.await()
+        }
         view.findViewById<TextView>(R.id.bubble_subdescription)
         view.findViewById<TextView>(R.id.bubble_description).text=evento.usuarios.size.toString()+"/"+evento.maxUsuarios.toString()
         return view
@@ -43,6 +51,7 @@ class ventanaGoogle(context: Activity) : GoogleMap.InfoWindowAdapter {
 
 
     }
+
 
 
 

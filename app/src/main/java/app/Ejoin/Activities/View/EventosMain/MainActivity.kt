@@ -17,13 +17,16 @@ import app.Ejoin.Activities.View.AddEvent
 import app.Ejoin.Activities.View.EventosMain.fragments.EventFragment
 import app.Ejoin.Activities.View.EventosMain.fragments.GoogleMapFragment
 import app.Ejoin.Activities.View.Perfil
+import app.Ejoin.Activities.ViewModel.EventosDatoViewModel
 import app.Ejoin.Activities.ViewModel.EventosViewModel
 import app.Ejoin.Adapter.RecyclerFiltro
 import app.Ejoin.DataClasses.EventoData
 import app.Ejoin.DataClasses.Filtros
+import app.Ejoin.DataClasses.Usuario
 import app.Ejoin.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import utilities.Constants
@@ -35,47 +38,29 @@ import utilities.PreferencesManager
 *  */
 
 class MainActivity : AppCompatActivity() {
-
+    var eventosFilt :  MutableList<EventoData> = mutableListOf()
     private var fragmentoUsadoMapa = false
     //preferences
     private lateinit var userPreferences : PreferencesManager
-
     //variables destinadas a obtener datos
     private val db = Firebase.firestore
     var eventos : MutableList<EventoData> = mutableListOf()
-
     //gestion de fragmentos
     val FM: FragmentManager = supportFragmentManager
     lateinit var  googleMapFragment : GoogleMapFragment
     lateinit var fragmentEvento: EventFragment
-
     //filtros
     private lateinit var adapter : RecyclerFiltro
     private lateinit var recyclerView : RecyclerView
-
     private var firstCharge = true
     var filtro = Filtros()
     //new Event
-    private lateinit var addEvent : ExtendedFloatingActionButton
-    /**
-     *
-     *
-     *
-     *
-     *
-     * */
+    private lateinit var addEvent : Button
     private val viewModel : EventosViewModel by viewModels()
-    /**
-     *
-     *
-     *
-     * */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
         initActionBar()
         userPreferences = PreferencesManager(this)
            if(userPreferences.getBoolean(Constants.ESEMPRESA)) {
@@ -99,7 +84,6 @@ class MainActivity : AppCompatActivity() {
                 else {
                     (FM.fragments[0] as EventFragment).filtrarMapa(eventos  as ArrayList<EventoData>)
                 }
-
             }
 
         })
@@ -136,7 +120,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     private fun cargarEventos() {
         viewModel.getEventos()
     }
@@ -170,17 +153,12 @@ class MainActivity : AppCompatActivity() {
             fragmentoUsadoMapa = false
 
         }
-
-
          recyclerView =findViewById(R.id.recyclerFiltros)
 
         findViewById<Button>(R.id.filtros).setOnClickListener{
           startActivityForResult(Intent(this, FilterActivity::class.java),1)
 
-
         }
-
-        
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -192,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun filtrar(data: Intent?) {
-        var eventosFilt : MutableList<EventoData> = mutableListOf()
+        eventosFilt = mutableListOf()
         filtro.deportesFilt= data?.extras?.get("deportes") as Boolean
         filtro.ocioFilt= data?.extras?.get("ocio") as Boolean
         filtro.musicaFilt= data?.extras?.get("musica") as Boolean

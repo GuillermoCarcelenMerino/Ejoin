@@ -7,33 +7,41 @@
     tools:context=".Activities.View.Chat.fragments.ChatListfragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+android:background="@drawable/backgroundlogin"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
-            app:layout_constraintTop_toTopOf="parent">
-
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="#7D9D9C"
+            >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#123"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/buscarUser"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="50dp"
+                    android:layout_marginLeft="30dp"
                     android:layout_weight="@integer/material_motion_duration_long_1"
-                    android:text="fdasfa"
-                    android:textColor="@color/white" />
+                    android:hint="buscar usuario"
+                    android:textColorHint="#E4DCCF"
+                    android:textColor="#E4DCCF"
+                    android:backgroundTint="#E4DCCF" />
 
                 <Button
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/chat" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/search"
+                    app:backgroundTint="#F0EBE3"/>
 
 
             </LinearLayout>
@@ -41,7 +49,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerChatList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="@drawable/backgroundlogin"
+
+                />
 
 
         </LinearLayout>
@@ -57,8 +68,10 @@
                 android:id="@+id/bottom_navigationChat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:menu="@menu/navigation_menu"
-                />
+                android:background="#576F72"
+                app:itemIconTint="#F0EBE3"
+                app:itemTextColor="#F0EBE3"
+                app:menu="@menu/navigation_menu" />
 
         </RelativeLayout>
 

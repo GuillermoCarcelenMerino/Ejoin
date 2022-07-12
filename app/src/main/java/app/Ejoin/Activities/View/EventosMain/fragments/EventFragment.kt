@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.Ejoin.Activities.Model.Usuarios
 import app.Ejoin.Adapter.RecyclerEventos
 import app.Ejoin.DataClasses.EventoData
 import app.Ejoin.R
@@ -15,6 +16,7 @@ class EventFragment : Fragment() {
     private lateinit var eventos: ArrayList<EventoData>
     private lateinit var adapter : RecyclerEventos
     private lateinit var recyclerView : RecyclerView
+
 
 
 
@@ -39,14 +41,14 @@ class EventFragment : Fragment() {
     private fun initRecycler() {
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerEventos(requireActivity(),eventos as ArrayList<EventoData>)
+        adapter = RecyclerEventos(requireActivity(),eventos)
         recyclerView.adapter = adapter
     }
 
     fun filtrarMapa( eventos : ArrayList<EventoData>){
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerEventos(requireActivity(),eventos )
+        adapter = RecyclerEventos(requireActivity(), eventos)
         recyclerView.adapter = adapter
     }
 

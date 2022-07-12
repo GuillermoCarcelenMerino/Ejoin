@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.View.LoginActivity">
+    android:background="@drawable/backgroundlogin">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/chat"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"/>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:elevation="100dp"
+    android:background="@drawable/sombras"
+    android:padding="30dp"
+    >
 
 
     <EditText
@@ -18,6 +34,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:textAlignment="center"
         android:layout_marginTop="30dp"
+        android:textColorHint="#E4DCCF"
+        android:textColor="#E4DCCF"
+        android:backgroundTint="#E4DCCF"
         />
 
     <EditText
@@ -30,48 +49,62 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:textAlignment="center"
         android:layout_marginTop="50dp"
-        />
+        android:textColor="#E4DCCF"
+        android:backgroundTint="#E4DCCF"
+        android:textColorHint="#E4DCCF"/>
     <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/UsuarioPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"
-        >
+        app:layout_constraintTop_toBottomOf="@id/UsuarioPassword"
+        app:layout_constraintStart_toStartOf="@id/UsuarioPassword">
         <CheckBox
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="5dp"
             android:id="@+id/rememberMe"
             android:layout_width="30dp"
-            android:layout_height="30dp"/>
+            android:layout_height="30dp"
+
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12dp"
+            android:textColor="#E4DCCF"
+            android:backgroundTint="#E4DCCF"
             android:text="Remember me"/>
 
     </LinearLayout>
     <Button
         android:id="@+id/login"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Login"
+        android:backgroundTint="#E4DCCF"
+        android:textColor="#576F72"
         app:layout_constraintTop_toBottomOf="@id/UsuarioPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="50dp"/>
-    <Button
+        android:layout_marginTop="50dp" />
+    <TextView
         android:id="@+id/registrarse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="registrarse"
+        android:text="¿No tienes cuenta? Registrate"
+        android:textColor="#E4DCCF"
         app:layout_constraintTop_toBottomOf="@id/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="10dp"/>
-
-
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/RecuperarContraseña"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/UsuarioPassword"
+        app:layout_constraintEnd_toEndOf="@id/UsuarioPassword"
+        android:textSize="12dp"
+        android:textColor="#E4DCCF"
+        android:backgroundTint="#E4DCCF"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -65,7 +65,6 @@ class Chats {
                     .addOnFailureListener {
                             x->añadido.value=false
                     }
-
             }
 
         return añadido
@@ -78,7 +77,6 @@ class Chats {
             it.update("id", it.id).addOnSuccessListener {
                 creado.value=true
             }
-
                 .addOnFailureListener {
                     creado.value = false
                 }

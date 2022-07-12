@@ -7,14 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.Ejoin.Activities.Model.Usuarios
 import app.Ejoin.Activities.View.DatosEventos
 import app.Ejoin.DataClasses.EventoData
+import app.Ejoin.DataClasses.Usuario
 import app.Ejoin.R
 import com.bumptech.glide.Glide
 import utilities.Constants
 
-class RecyclerEventos (private val context : Context,private val dataSet: ArrayList<EventoData>) :
+class RecyclerEventos(
+    private val context: Context,
+    private val dataSet: ArrayList<EventoData>,
+) :
 RecyclerView.Adapter<RecyclerEventos.ViewHolder>() {
 
     // Create new views (invoked by the layout manager)
@@ -34,35 +40,23 @@ RecyclerView.Adapter<RecyclerEventos.ViewHolder>() {
         viewHolder.nombre.text = dataSet[position].nombreEvento
         viewHolder.fecha.text = dataSet[position].fecha
         viewHolder.empresa.text = dataSet[position].empresa
-        viewHolder.lugar.text = dataSet[position].lugar
         viewHolder.precio.text = dataSet[position].precio.toString()+"€"
-        viewHolder.categoria.text = dataSet[position].categoria
         viewHolder.usuarios.text = dataSet[position].usuarios.size.toString() + "/"+ dataSet[position].maxUsuarios.toString()
         viewHolder.evento = dataSet[position]
         Glide.with(context )
             .load(dataSet[position].photo)
             .into(viewHolder.photo)
-
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
 
-
-    /*
-    * TODO Incluir informacion en intent para evitar realizar busquedas nuevas en firebase sobre el evento a analizar
-    *  Añadir boton para busqueda en mapa
-    *
-    * */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
          var evento  = EventoData()
         val nombre: TextView
         val empresa : TextView
-        val lugar : TextView
         val fecha : TextView
         val precio : TextView
-        val categoria : TextView
         val usuarios : TextView
         val photo : ImageView
 
@@ -87,10 +81,8 @@ RecyclerView.Adapter<RecyclerEventos.ViewHolder>() {
             }
             nombre = view.findViewById(R.id.NombreEvento)
             empresa = view.findViewById(R.id.NombreEmpresa)
-            lugar = view.findViewById(R.id.LugarEvento)
             fecha = view.findViewById(R.id.FechaEvento)
             precio = view.findViewById(R.id.PrecioEvento)
-            categoria = view.findViewById(R.id.CategoriaEvento)
             usuarios = view.findViewById(R.id.Usuarios)
             photo = view.findViewById(R.id.ImagenEvento)
 

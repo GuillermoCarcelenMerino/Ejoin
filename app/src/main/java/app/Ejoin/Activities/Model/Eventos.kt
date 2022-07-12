@@ -7,6 +7,7 @@ import app.Ejoin.Adapter.RecyclerChat
 import app.Ejoin.DataClasses.Chat
 import app.Ejoin.DataClasses.EventoData
 import app.Ejoin.DataClasses.Message
+import app.Ejoin.DataClasses.Usuario
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
@@ -69,7 +70,6 @@ class Eventos {
                             }
                     }
                 }
-
                 it.reference.update("users",userChat)
             }
         mutableEvent.value = evento
@@ -135,5 +135,15 @@ class Eventos {
 
     }
 
+    fun getUsuariosEvento( eventoUsers : ArrayList<String>) : MutableLiveData<MutableList<Usuario>> {
+        var usuarios = MutableLiveData<MutableList<Usuario>>()
+        FirebaseFirestore.getInstance().collection(Constants.USERBD)
+            .whereIn(Constants.EMAIL, eventoUsers)
+            .get()
+            .addOnSuccessListener {
+                usuarios.value = it.toObjects(Usuario::class.java)
+            }
 
+        return usuarios
+    }
 }

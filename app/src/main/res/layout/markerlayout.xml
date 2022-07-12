@@ -4,7 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bonuspack_bubble"
     android:backgroundTint="#A5F5FF"
     android:layout_gravity="center_horizontal"
     android:gravity="center_horizontal">
@@ -28,7 +27,8 @@
                 android:layout_width="170dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:background="@color/design_default_color_primary" />
+                android:background="@color/design_default_color_primary"
+                android:scaleType="fitXY"/>
 
             <TextView
                 android:id="@+id/NombreEventoMarker"

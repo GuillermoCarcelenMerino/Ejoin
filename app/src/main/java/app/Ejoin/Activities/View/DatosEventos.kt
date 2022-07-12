@@ -3,6 +3,7 @@ package app.Ejoin.Activities.View
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -38,41 +39,19 @@ class DatosEventos : AppCompatActivity() {
 
     private lateinit var userPreferences : PreferencesManager
 
-
-    //Datos para el recycler de usuarios
-    private val db = Firebase.firestore
     var usuarios : MutableList<Usuario> = mutableListOf()
     private lateinit var adapter : RecyclerUsuarios
     private lateinit var recyclerView : RecyclerView
 
-
-    /**
-     *
-     *
-     *
-     *
-     *
-     * */
     private val viewModel : EventosDatoViewModel by viewModels()
-    /**
-     *
-     *
-     *
-     * */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datos_eventos)
+        userPreferences = PreferencesManager(this)
         obetenerDatosIntent()
         cargarDatos()
         cargarRecycler()
-
-
-
-        /*
-       *
-       *
-       * */
         viewModel.eventoUpdate.observe(this, Observer {
             evento=it
             numParticipantes.text=evento.usuarios.size.toString() + "/"+evento.maxUsuarios
@@ -85,29 +64,15 @@ class DatosEventos : AppCompatActivity() {
             adapter= RecyclerUsuarios(this,usuarios as ArrayList<Usuario>)
             recyclerView.adapter = adapter
         })
-
-
-
+        viewModel.usuarios.observe(this, Observer {
+            x->this.usuarios=x
+            initRecycler()
+        })
     }
 
     private fun cargarRecycler() {
-        db.collection(Constants.USERBD).whereIn(Constants.EMAIL, evento.usuarios)
-            .get()
-            .addOnSuccessListener {
-                it.documents.forEach {
-
-                    var usuario  = Usuario(
-                        it.getString(Constants.EMAIL)!!,
-                        it.getString(Constants.USERPHOTO)!!,
-                        it.getString(Constants.NOMBREUSUARIO)!! ,
-                        it.getBoolean(Constants.ESEMPRESA)!!)
-
-                    usuarios.add(usuario)
-                }
-                initRecycler()
-            }
-            .addOnFailureListener {
-            }
+        if(evento.usuarios.isNotEmpty())
+        viewModel.getUsuariosEvento(evento.usuarios)
     }
 
     private fun initRecycler() {
@@ -128,7 +93,7 @@ class DatosEventos : AppCompatActivity() {
         inscribirse=findViewById(R.id.inscribirse)
         photo= findViewById(R.id. fotoEvento)
         inscribirse()
-        nombreEvento.text = evento.nombreEvento
+        nombreEvento.text = evento.nombreEvento.toUpperCase()
         categoriaEvento.text = evento.categoria
         empresa.text = evento.empresa
         fecha.text = evento.fecha
@@ -139,6 +104,8 @@ class DatosEventos : AppCompatActivity() {
         Glide.with(this )
             .load(evento.photo)
             .into(photo)
+        if(evento.usuarios.contains(userPreferences.getString(Constants.EMAIL))|| evento.usuarios.size>=evento.maxUsuarios)
+            this.inscribirse.visibility= View.GONE
 
     }
 
@@ -154,7 +121,6 @@ class DatosEventos : AppCompatActivity() {
                 bundle.get(Constants.DETALLES) as String,
                 bundle.get(Constants.PRECIO) as Double,
                 bundle.get(Constants.LUGAR) as String,
-
                 GeoPoint(
                     bundle.get(Constants.ALTITUD) as Double,
                     bundle.get(Constants.LONGITUD) as Double
@@ -162,29 +128,15 @@ class DatosEventos : AppCompatActivity() {
                 bundle.get(Constants.MAXUSUARIOS) as Int,
                 bundle.get(Constants.USUARIOS) as ArrayList<String>,
                 bundle.getString(Constants.USERPHOTO) as String
-
                 )
         }
     }
 
     private fun inscribirse() {
-        userPreferences = PreferencesManager(this)
-
-        var usuarioEmail = userPreferences.getString(Constants.EMAIL)
-        var maxUsuarios = evento.maxUsuarios
-        var inscritos = evento.usuarios
-        if(inscritos.size<maxUsuarios && !inscritos.contains(usuarioEmail)) {
-            if (usuarioEmail != null) {
-
-                inscribirse.setOnClickListener {
-
-                    startActivityForResult(Intent(this, PasarelaPagoJava::class.java).apply {
-                        putExtra(Constants.PRECIO, evento.precio)
-                    }, 1)
-
-
-                }
-            }
+        inscribirse.setOnClickListener {
+            startActivityForResult(Intent(this, PasarelaPagoJava::class.java).apply {
+                putExtra(Constants.PRECIO, evento.precio)
+            }, 1)
         }
     }
 

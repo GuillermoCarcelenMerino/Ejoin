@@ -169,18 +169,15 @@ public class PasarelaPagoJava extends AppCompatActivity {
     private SynapTransaction buildTransaction(){
         // Genere el número de orden, este es solo un ejemplo
         String number=String.valueOf(System.currentTimeMillis());
-
         // Seteo de los datos de transacción
         // Referencie al objeto país
         SynapCountry country=new SynapCountry();
         // Seteo del código de país
         country.setCode("PER"); // Código de País (ISO 3166-2)
-
         // Referencie al objeto moneda
         SynapCurrency currency=new SynapCurrency();
         // Seteo del código de moneda
         currency.setCode("PEN"); // Código de Moneda - Alphabetic code (ISO 4217)
-
         //Seteo del monto
         String amount=precio.toString();
         synapButton.setText("PAGAR " + precio.toString()+'€');
@@ -189,7 +186,6 @@ public class PasarelaPagoJava extends AppCompatActivity {
         // Seteo del cliente
         customer.setName("Javier");
         customer.setLastName("Pérez");
-
         // Referencie al objeto dirección del cliente
         SynapAddress address=new SynapAddress();
         // Seteo del pais (country), niveles de ubicación geográfica (levels), dirección (line1 y line2) y código postal (zip)
@@ -325,19 +321,16 @@ public class PasarelaPagoJava extends AppCompatActivity {
                         }
                     }
             );
-
             AlertDialog alert11 = builder1.create();
             alert11.show();
         }
         else {
             builder1.setMessage("No autorizado");
             builder1.setCancelable(true);
-
             builder1.setPositiveButton(
                     "OK",
                     new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface dialog, int id) {
-
                         }
                     }
             );

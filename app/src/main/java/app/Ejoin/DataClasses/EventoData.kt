@@ -7,7 +7,7 @@ class EventoData(
     val  nombreEvento : String="",
     val empresa : String="",
     val fecha : String="", //TODO Definir bien,
-    val categoria : String="",
+    var categoria : String="",
     val detalles : String="",
     val precio : Double=0.0,
     val lugar : String="",
