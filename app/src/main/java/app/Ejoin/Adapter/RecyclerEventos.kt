@@ -20,14 +20,19 @@ import utilities.Constants
 class RecyclerEventos(
     private val context: Context,
     private val dataSet: ArrayList<EventoData>,
+    private val perfil : Boolean
 ) :
 RecyclerView.Adapter<RecyclerEventos.ViewHolder>() {
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
-        val view = LayoutInflater.from(viewGroup.context)
+        val view : View
+        if(!perfil)
+        view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.eventrow, viewGroup, false)
+        else view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.perfileventrow, viewGroup, false)
 
         return ViewHolder(view)
     }

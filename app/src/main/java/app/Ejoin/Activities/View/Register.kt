@@ -111,7 +111,7 @@ class Register : AppCompatActivity() {
 
     private fun checkuserName() {
         if (!nombre.text.toString().equals("")) {
-            findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.parseColor("#054ADF"))
+            findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.BLACK)
 
             viewModel.comprobarDatosLogin(nombre.text.toString())
         }else {
@@ -126,7 +126,7 @@ class Register : AppCompatActivity() {
         {
             findViewById<TextView>(R.id.correoRegisterTextView).setTextColor(Color.RED)
             canBeSaved = false
-        } else findViewById<TextView>(R.id.correoRegisterTextView).setTextColor(Color.parseColor("#054ADF"))
+        } else findViewById<TextView>(R.id.correoRegisterTextView).setTextColor(Color.BLACK)
         if (!password.text.toString().equals(password2.text.toString())) {
             canBeSaved = false
             findViewById<TextView>(R.id.incorrectPasswordRegis).text =
@@ -135,11 +135,11 @@ class Register : AppCompatActivity() {
         if (password.text.toString().equals("") || password.text.length < 6) {
             canBeSaved = false
             findViewById<TextView>(R.id.passwordRegisterTextView).setTextColor(Color.RED)
-        } else findViewById<TextView>(R.id.passwordRegisterTextView).setTextColor(Color.parseColor("#054ADF"))
+        } else findViewById<TextView>(R.id.passwordRegisterTextView).setTextColor(Color.BLACK)
         if (password2.text.toString().equals("")) {
             canBeSaved = false
             findViewById<TextView>(R.id.password2RegisterTextView).setTextColor(Color.RED)
-        } else findViewById<TextView>(R.id.password2RegisterTextView).setTextColor(Color.parseColor("#054ADF"))
+        } else findViewById<TextView>(R.id.password2RegisterTextView).setTextColor(Color.BLACK)
         if (!fotoSel) {
             canBeSaved = false
             Toast.makeText(this, "SELECIONA UNA FOTO DE PERFIL", Toast.LENGTH_LONG).show()
@@ -163,78 +163,6 @@ class Register : AppCompatActivity() {
         usuario.esEmpresa=checkBox.isChecked
         viewModel.registrar(nombre.text.toString(),usuario,uri)
 
-
-
-      /*  auth.createUserWithEmailAndPassword(correo.text.toString(), password.text.toString())
-            .addOnSuccessListener { task ->
-                /*
-                    creamos nuevo usuario con clase user
-                    +/
-                     */
-
-
-
-                val user = auth.currentUser
-                usuario.setEmail(user?.email.toString())
-                usuario.setId(user?.uid.toString())
-                usuario.setName(nombre.text.toString())
-                usuario.setEsEmpresa(checkBox.isChecked)
-
-
-                var storage = Firebase.storage
-
-                val storageRef = storage.reference
-                var file = uri
-                val riversRef = storageRef.child("usuarios/"+user?.email.toString())
-                var uploadTask = riversRef.putFile(file!!)
-
-                // Register observers to listen for when the download is done or if it fails
-                uploadTask.addOnSuccessListener { taskSnapshot ->
-
-                    taskSnapshot.storage.downloadUrl.addOnCompleteListener {
-                        var imagenUrl = it.result.toString()
-                        usuario.setPhoto(imagenUrl)
-                        db.collection(Constants.USERBD)
-                            .add(usuario)
-                            .addOnSuccessListener { documentReference ->
-                                //guardar en preferences
-                                userPreferences = PreferencesManager(this)
-                                userPreferences.putString(Constants.EMAIL,usuario.getEmail())
-                                userPreferences.putBoolean(Constants.LOGEADO, false)
-                                userPreferences.putString(Constants.USERID, auth.currentUser!!.uid)
-                                userPreferences.putBoolean(Constants.ESEMPRESA, usuario.getEsEmpresa())
-                                userPreferences.putString(Constants.USERPHOTO, imagenUrl)
-                                userPreferences.putString(Constants.NOMBREUSUARIO, usuario.getName())
-
-                                startActivity(Intent(this, MainActivity::class.java))
-                                finish()
-                            }
-                            .addOnFailureListener { e ->
-                                findViewById<ConstraintLayout>(R.id.formulario).visibility= View.VISIBLE
-                                findViewById<TextView>(R.id.NombreApp).visibility= View.GONE
-                                findViewById<ProgressBar>(R.id.progresBar).visibility= View.GONE
-                                findViewById<TextView>(R.id.bienvenido).visibility= View.GONE
-                                findViewById<TextView>(R.id.espere).visibility= View.GONE
-                                Toast.makeText(this, "Fallo al introducir usuario", Toast.LENGTH_LONG)
-                                    .show()
-                            }
-
-
-
-
-
-                    }}
-
-
-
-
-
-
-            }.addOnFailureListener {
-                val errorCode = it.message
-                Toast.makeText(this, errorCode, Toast.LENGTH_LONG).show()
-
-            }*/
     }
 
     private fun selecionarImagen() {

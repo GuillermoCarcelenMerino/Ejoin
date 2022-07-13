@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 
 class ventanaGoogle(context: Activity) : GoogleMap.InfoWindowAdapter {
@@ -34,6 +33,7 @@ class ventanaGoogle(context: Activity) : GoogleMap.InfoWindowAdapter {
 
         var image= view.findViewById<ImageView>(R.id.bubble_image)
 
+
         runBlocking {
          var cargar= async {
               Glide.with(context)
@@ -42,6 +42,14 @@ class ventanaGoogle(context: Activity) : GoogleMap.InfoWindowAdapter {
           }
         cargar.await()
         }
+        if(image.drawable==null)
+            if(evento.categoria=="OCIO")
+                image.setImageResource(R.drawable.ocios)
+            else if(evento.categoria=="ESTUDIO")
+                image.setImageResource(R.drawable.estudios)
+            else if(evento.categoria=="MUSICA")
+                image.setImageResource(R.drawable.concierto)
+            else image.setImageResource(R.drawable.deportes)
         view.findViewById<TextView>(R.id.bubble_subdescription)
         view.findViewById<TextView>(R.id.bubble_description).text=evento.usuarios.size.toString()+"/"+evento.maxUsuarios.toString()
         return view

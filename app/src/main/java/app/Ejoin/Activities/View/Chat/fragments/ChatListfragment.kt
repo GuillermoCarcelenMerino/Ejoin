@@ -96,7 +96,8 @@ class ChatListfragment : Fragment() {
     private fun filtUsers(text: CharSequence?) {
 
         if(text!=""){
-            var chatsFilt = chats.filter { x-> x.nombre.contains(text.toString()) }
+            var chatsFilt = chats.filter {
+                    x-> x.nombre.uppercase().contains(text.toString().uppercase()) }
             adapter = RecyclerChatLista(usuariosFilt,chatsFilt as ArrayList<Chat>  ,this)
             recyclerView.adapter = adapter
         }

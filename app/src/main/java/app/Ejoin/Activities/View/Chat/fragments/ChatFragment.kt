@@ -149,6 +149,7 @@ class ChatFragment : Fragment() {
 
     private fun sendMessageChat() {
         if(newChat){
+            this.chat.nombre=usuarioFin.name
             createNewChat()
         }
         else addMesage()

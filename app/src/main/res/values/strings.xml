@@ -13,7 +13,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string-array name="planets_array">
-        <item>DEPORTES</item>
+        <item >DEPORTES</item>
         <item>OCIO</item>
         <item>MUSICA</item>
         <item>ESTUDIO</item>

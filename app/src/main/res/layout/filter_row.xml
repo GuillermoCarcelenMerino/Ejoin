@@ -12,7 +12,7 @@
         android:layout_margin="10dp"
         android:backgroundTint="#F0EBE3"
         android:text="hola"
-        android:textColor="#7D9D9C"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

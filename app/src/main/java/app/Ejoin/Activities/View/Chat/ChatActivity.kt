@@ -20,7 +20,6 @@ class ChatActivity : AppCompatActivity() {
     val FM: FragmentManager = supportFragmentManager
     lateinit var fragmentLista: ChatListfragment
     private lateinit var userPreferences : PreferencesManager
-    private lateinit var user : Usuario
 
     //Datos para el recycler de usuarios
     private val db = Firebase.firestore
@@ -65,100 +64,6 @@ class ChatActivity : AppCompatActivity() {
 
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    private fun cargarRecycler() {
-
-        db.collection(Constants.USERBD).get()
-            .addOnSuccessListener {
-
-                it.documents.forEach {
-
-                    var usuario  = Usuario(
-                        it.getString(Constants.EMAIL)!!,
-                        it.getString(Constants.USERPHOTO)!!,
-                        it.getString(Constants.NOMBREUSUARIO)!! ,
-                        it.getBoolean(Constants.ESEMPRESA)!!)
-                    if(it.getString(Constants.EMAIL)!=this.usuario.email) {
-                        usuarios.add(usuario)
-                    }
-                    else {
-                        userReference=it.reference
-                    }
-
-
-                }
-
-                userReference.collection("chats").get().addOnSuccessListener {
-                    var chats = it.toObjects(Chat::class.java)
-                    usuario.chats=chats as ArrayList<Chat>
-                    initControlFragments()
-                }
-
-
-
-            }
-            .addOnFailureListener {
-            }
-    }
-
-    private fun initControlFragments() {
-        var datosUsuario=intent.extras
-        if(datosUsuario!=null)
-        {
-            var usuarioIr : Usuario = Usuario()
-            var emailUsuario = datosUsuario.get(Constants.EMAIL)
-            for(usuario in usuarios){
-                if(usuario.email==emailUsuario)
-                    usuarioIr = usuario
-            }
-
-            var fragmentChat = ChatFragment.newInstance(usuario,usuarioIr)
-            val FT: FragmentTransaction = FM.beginTransaction()
-            FT.replace(R.id.fragment, fragmentChat)
-            FT.commit()
-
-        }
-
-        else {
-            fragmentLista = ChatListfragment.newInstance(
-                usuarios as ArrayList<Usuario>,
-                usuario,
-                userReference
-            )
-            val FT: FragmentTransaction = FM.beginTransaction()
-            FT.add(R.id.fragment, fragmentLista)
-            FT.commit()
-
-        }
-    }
-
     override fun onBackPressed() {
 
         var datosUsuario = intent.extras
@@ -173,7 +78,4 @@ class ChatActivity : AppCompatActivity() {
 
         }
     }
-
-*/
-
 }

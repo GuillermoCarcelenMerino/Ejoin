@@ -41,14 +41,14 @@ class EventFragment : Fragment() {
     private fun initRecycler() {
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerEventos(requireActivity(),eventos)
+        adapter = RecyclerEventos(requireActivity(),eventos,false)
         recyclerView.adapter = adapter
     }
 
     fun filtrarMapa( eventos : ArrayList<EventoData>){
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerEventos(requireActivity(), eventos)
+        adapter = RecyclerEventos(requireActivity(), eventos,false)
         recyclerView.adapter = adapter
     }
 

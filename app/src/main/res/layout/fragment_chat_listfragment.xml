@@ -17,7 +17,7 @@ android:background="@drawable/backgroundlogin"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="#7D9D9C"
+            android:background="#304FFE"
             >
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,7 +34,9 @@ android:background="@drawable/backgroundlogin"
                     android:hint="buscar usuario"
                     android:textColorHint="#E4DCCF"
                     android:textColor="#E4DCCF"
-                    android:backgroundTint="#E4DCCF" />
+                    android:backgroundTint="#E4DCCF"
+                    android:singleLine="true"
+                    android:scrollHorizontally="true"/>
 
                 <Button
                     android:layout_width="30dp"
@@ -68,9 +70,9 @@ android:background="@drawable/backgroundlogin"
                 android:id="@+id/bottom_navigationChat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#576F72"
-                app:itemIconTint="#F0EBE3"
-                app:itemTextColor="#F0EBE3"
+                android:background="#304FFE"
+                app:itemIconTint="#E8EAF6"
+                app:itemTextColor="#E8EAF6"
                 app:menu="@menu/navigation_menu" />
 
         </RelativeLayout>

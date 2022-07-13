@@ -93,7 +93,7 @@ class Eventos {
         return imagenUrl
     }
 
-    fun addEvento(evento : EventoData,) : MutableLiveData<Boolean>{
+    fun addEvento(evento : EventoData) : MutableLiveData<Boolean>{
         var done = MutableLiveData<Boolean>()
         FirebaseFirestore.getInstance()
             .collection(Constants.EVENTOSDB)

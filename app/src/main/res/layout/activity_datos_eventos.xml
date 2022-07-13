@@ -28,7 +28,8 @@
         android:text="NOMBRE DEL EVENTO"
         android:textAlignment="center"
         android:textStyle="bold"
-        android:textColor="#576F72"
+        android:textColor="#E8EAF6"
+        android:textSize="30sp"
         android:layout_marginTop="10dp"/>
 
     <LinearLayout
@@ -42,7 +43,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Nombre del evento"
-            android:textColor="#576F72"
+            android:textColor="#E8EAF6"
+            android:textSize="16sp"
             android:textAlignment="center"/>
         <TextView
             android:id="@+id/eventoCategoria"
@@ -50,7 +52,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Categoria del evento"
-            android:textColor="#576F72"
+            android:textColor="#E8EAF6"
+            android:textSize="16sp"
             android:textAlignment="center"/>
 
     </LinearLayout>
@@ -66,7 +69,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Nombre del evento"
-            android:textColor="#576F72"
+            android:textColor="#E8EAF6"
+            android:textSize="16sp"
             android:textAlignment="center"/>
         <TextView
             android:id="@+id/eventoLugar"
@@ -74,7 +78,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Categoria del evento"
-            android:textColor="#576F72"
+            android:textColor="#E8EAF6"
+            android:textSize="16sp"
             android:textAlignment="center"/>
 
     </LinearLayout>
@@ -90,7 +95,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Nombre del evento"
-            android:textColor="#576F72"
+            android:textColor="#E8EAF6"
+            android:textSize="16sp"
             android:textAlignment="center"/>
         <TextView
             android:id="@+id/eventoPrecio"
@@ -98,7 +104,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Categoria del evento"
-            android:textColor="#576F72"
+            android:textColor="#E8EAF6"
+            android:textSize="16sp"
             android:textAlignment="center"/>
 
 
@@ -110,7 +117,8 @@
             android:text="DETALLES"
             android:textAlignment="center"
             android:textStyle="bold"
-            android:textColor="#576F72"
+            android:textColor="#E8EAF6"
+            android:textSize="20sp"
             />
     </LinearLayout>
 
@@ -127,8 +135,8 @@
                 android:layout_height="match_parent"
                 android:textAlignment="center"
                 android:text="hola"
-                android:textColor="#576F72"
-                />
+                android:textColor="#E8EAF6"
+                android:textSize="16sp"                />
     </ScrollView>
     <LinearLayout
 
@@ -143,8 +151,8 @@
         android:text="PARTICIPANTES"
         android:textAlignment="center"
         android:textStyle="bold"
-        android:textColor="#576F72"
-        />
+        android:textColor="#E8EAF6"
+        android:textSize="20sp"        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/participantes"
         android:layout_width="match_parent"
@@ -152,8 +160,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
-        android:elevation="20dp"
-        android:background="#F0EBE3"/>
+        android:elevation="20dp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -173,9 +180,10 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="30dp"
-            android:backgroundTint="#576F72"
+            android:backgroundTint="#E8EAF6"
+            android:textColor="#536DFE"
             android:text="INSCRIBIRSE"
-            android:textColor="#F0EBE3" />
+             />
     </RelativeLayout>
 
 

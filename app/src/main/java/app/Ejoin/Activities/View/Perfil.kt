@@ -108,7 +108,7 @@ class Perfil : AppCompatActivity() {
     private fun obtenerDatosUsuario() {
         var datosUsuario=intent.extras
         if(datosUsuario!=null) {
-            usuario.email=datosUsuario.getString(Constants.NOMBREUSUARIO)!!
+            usuario.name=datosUsuario.getString(Constants.NOMBREUSUARIO)!!
             usuario.email=datosUsuario.getString(Constants.EMAIL)!!
             usuario.photo=datosUsuario.getString(Constants.USERPHOTO)!!
             usuario.esEmpresa=datosUsuario.getBoolean(Constants.ESEMPRESA)!!
@@ -135,7 +135,7 @@ class Perfil : AppCompatActivity() {
     private fun initRecycler() {
         recyclerView = findViewById(R.id.eventosParticipados)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        adapter = RecyclerEventos(this, eventos as ArrayList<EventoData>)
+        adapter = RecyclerEventos(this, eventos as ArrayList<EventoData>,true)
         recyclerView.adapter = adapter
 
     }

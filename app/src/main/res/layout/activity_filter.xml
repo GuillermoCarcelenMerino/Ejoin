@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Más Filtros"
-        android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textColor="#E8EAF6"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,8 +27,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
         android:text="Borrar Filtros"
-        android:textColor="#576F72"
-        android:textSize="10sp"
+        android:textColor="#E8EAF6"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,14 +54,15 @@
             android:layout_height="wrap_content"
             android:text="CATEGORIA DE EVENTO"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="#E8EAF6"
+            android:textSize="16sp"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="10dp"
-            android:background="@color/black"
+            android:background="#E8EAF6"
              />
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,8 +80,6 @@
                     style="@style/CustomChipStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:checkedIcon="@drawable/selected"
-                    android:textColor="#E4DCCF"
                     android:text="Deportes" />
 
                 <com.google.android.material.chip.Chip
@@ -88,7 +87,6 @@
                     style="@style/CustomChipStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#E4DCCF"
                     android:text="Ocio" />
 
 
@@ -97,14 +95,12 @@
                     style="@style/CustomChipStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#E4DCCF"
                     android:text="Musica" />
                 <com.google.android.material.chip.Chip
                     android:id="@+id/estudiosFilt"
                     style="@style/CustomChipStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#E4DCCF"
                     android:text="Estudios" />
 
             </com.google.android.material.chip.ChipGroup>
@@ -117,16 +113,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FILTROS ADICIONALES"
-            android:textStyle="bold"
-            android:textColor="@color/black"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:text="FILTROS ADICIONALES"
+            android:textColor="#E8EAF6"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginTop="10dp"
-            android:background="@color/black"
+            android:background="#E8EAF6"
             />
         <LinearLayout
             android:layout_width="match_parent"
@@ -141,7 +139,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="3"
                 android:text="Buscar por fecha"
-                android:textColor="#576F72"   />
+                android:textColor="#E8EAF6"
+                android:textSize="16sp"   />
             <DatePicker
             android:id="@+id/calendarFilt"
             android:layout_width="wrap_content"
@@ -164,7 +163,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="3"
                 android:text="Solo eventos disponibles"
-                android:textColor="#576F72"   />
+                android:textColor="#E8EAF6"
+                android:textSize="16sp"   />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/disponiblesFilt"
@@ -188,16 +188,16 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="3"
                 android:text="Precio maximo"
-                android:textColor="#576F72"   />
+                android:textColor="#E8EAF6"
+                android:textSize="16sp"   />
 
-                <com.google.android.material.slider.RangeSlider
+            <com.google.android.material.slider.RangeSlider
                 android:id="@+id/precioFilt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:valueFrom="0.0"
-                android:valueTo="100.0"
-                    />
+                android:valueTo="100.0" />
 
         </LinearLayout>
 
@@ -208,8 +208,8 @@
     android:id="@+id/aplicarFilt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="#576F72"
-    android:textColor="#E4DCCF"
+    android:backgroundTint="#E8EAF6"
+    android:textColor="#536DFE"
     android:text="APLICAR FILTROS"
     app:layout_constraintBottom_toBottomOf="parent"
     android:layout_margin="30dp"/>

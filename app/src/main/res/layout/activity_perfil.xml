@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:itemIconTint="#F0EBE3"
-        android:background="#576F72" />
+        android:background="#304FFE" />
 
 
 
@@ -45,8 +45,9 @@
             android:layout_marginTop="30dp"
             android:text="Name"
             android:textAlignment="center"
-            android:textColor="#576F72"
-            android:textSize="14dp" />
+            android:textColor="#E8EAF6"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/correoPerfil"
@@ -55,8 +56,8 @@
             android:layout_marginTop="30dp"
             android:text="Correo@gmail.com"
             android:textAlignment="center"
-            android:textColor="#576F72"
-            android:textSize="14dp" />
+            android:textColor="#E8EAF6"
+            android:textSize="16sp"  />
 
         <TextView
             android:layout_width="match_parent"
@@ -64,8 +65,9 @@
             android:layout_marginTop="30dp"
             android:text="EVENTOS PARTICIPADOS"
             android:textAlignment="center"
-            android:textColor="#576F72"
-            android:textStyle="bold" />
+            android:textColor="#E8EAF6"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
@@ -75,7 +77,6 @@
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/linearPerfil"
-        android:background="#F0EBE3"
         android:elevation="20dp"
         android:layout_marginTop="50dp"/>
 
@@ -90,9 +91,9 @@
             android:id="@+id/bottom_navigationPerfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#576F72"
-            app:itemIconTint="#F0EBE3"
-            app:itemTextColor="#F0EBE3"
+            android:background="#304FFE"
+            app:itemIconTint="#E8EAF6"
+            app:itemTextColor="#E8EAF6"
             app:menu="@menu/navigation_menu" />
 
     </RelativeLayout>
