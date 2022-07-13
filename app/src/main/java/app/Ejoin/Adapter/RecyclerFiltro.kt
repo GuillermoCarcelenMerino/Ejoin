@@ -1,17 +1,11 @@
 package app.Ejoin.Adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import app.Ejoin.Activities.Perfil
-import app.Ejoin.DataClasses.Filtros
-import app.Ejoin.DataClasses.Usuarios
 import app.Ejoin.R
-import com.mikhaellopez.circularimageview.CircularImageView
-import utilities.Constants
 
 class RecyclerFiltro (private val filtros : ArrayList<String>) :
 RecyclerView.Adapter<RecyclerFiltro.ViewHolder>() {

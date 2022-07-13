@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Activities.ChatFragment">
+    tools:context=".Activities.View.Chat.fragments.ChatFragment"
+    android:background="@drawable/backgroundlogin">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -20,7 +21,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="#123">
+            android:background="#304FFE">
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/imagenUsuarioFin"
@@ -28,14 +29,15 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/white" />
+                />
 
             <TextView
                 android:id="@+id/nombreUsuarioFin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="fdasfa" />
+                android:text="fdasfa"
+                android:textColor="#E4DCCF" />
 
         </RelativeLayout>
 
@@ -53,7 +55,7 @@
         android:layout_gravity="bottom"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="#123">
+        android:background="#304FFE">
 
         <EditText
             android:id="@+id/textMessage"
@@ -62,8 +64,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
+            android:textColorHint="#E4DCCF"
+            android:textColor="#E4DCCF"
+            android:backgroundTint="#E4DCCF"
+            android:singleLine="true"
+            android:scrollHorizontally="true"
             android:hint="message"/>
 
         <Button
@@ -71,7 +76,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/sendmessage"
-            app:backgroundTint="@color/white"/>
+            app:backgroundTint="#E4DCCF"/>
     </LinearLayout>
 
 

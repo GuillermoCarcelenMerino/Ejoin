@@ -15,13 +15,12 @@ class Constants {
         val NOMBREUSUARIO = "name"
         val ESEMPRESA = "esEmpresa"
         val CHATS = "chats"
-
+        val Contraseña = "contraseña"
 
         //Constantes para evento  y su BD
         val EVENTOSDB = "eventos"
         val CATEGORIA = "categoria"
         val EVENTOID = "id"
-        val EMPRESA = "empresa"
         val NOMBREVENTO = "nombreEvento"
         val FECHA = "fecha"
         val DETALLES = "detalles"
@@ -31,8 +30,6 @@ class Constants {
         val USUARIOS = "usuarios"
         val ALTITUD = "latitude"
         val LONGITUD = "longitud"
-
-
 
     }
 

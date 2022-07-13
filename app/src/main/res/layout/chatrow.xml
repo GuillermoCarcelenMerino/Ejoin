@@ -2,23 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
-            <TextView
-                android:background="#43A5"
-                android:id="@+id/mensajeReceptor"
-                android:layout_width="300dp"
-                android:layout_height="30dp"
-                android:text="COLOR negro De letra"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:layout_marginTop="10dp"
+    <TextView
+        android:id="@+id/mensajeReceptor"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:background="#7D9D9C"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:textColor="#F0EBE3"
+        android:text="COLOR negro De letra"
 
-                />
+        />
 
-            <TextView
+    <TextView
                 android:id="@+id/mensajeEmisor"
                 android:layout_width="300dp"
                 android:layout_height="30dp"
@@ -26,7 +26,8 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#546A"
+                android:background="#E8EAF6"
+                android:textColor="@color/black"
                 android:layout_gravity="end"
                 />
 

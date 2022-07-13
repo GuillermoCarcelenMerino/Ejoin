@@ -18,14 +18,11 @@ class FilterActivity : AppCompatActivity() {
 
     private var precioCambio = false
     private var distanciaCambio = false
-
     private lateinit var precioFilt : RangeSlider
     private lateinit var disponibleFilt : SwitchMaterial
     private lateinit var borrarFiltros : TextView
     private lateinit var calendarFilt : DatePicker
     private lateinit var aplicarFilt : Button
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,22 +47,13 @@ class FilterActivity : AppCompatActivity() {
         precioFilt.addOnChangeListener { slider, value, fromUser ->
             precioCambio=true
         }
-
-
-
         borrarFiltros.setOnClickListener {
             borrarCambios()
-
-
         }
         aplicarFilt.setOnClickListener {
 
             guardarCambios()
-
         }
-
-
-
 
     }
 

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.MainActivity"
+    tools:context=".Activities.View.EventosMain.MainActivity"
     android:id="@+id/drawerLayout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,20 +17,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="#304FFE">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                >
 
                 <Button
                     android:id="@+id/botonMapa"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:backgroundTint="#F1F0F0"
-                    android:textColor="@color/black"
+                    android:backgroundTint="#304FFE"
+                    android:textColor="#E8EAF6"
                     android:insetTop="0dp"
                     android:insetRight="0dp"
                     android:insetBottom="0dp"
@@ -44,9 +46,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:backgroundTint="#F1F0F0"
                     android:insetTop="0dp"
-                    android:textColor="@color/black"
+                    android:backgroundTint="#304FFE"
+                    android:textColor="#E8EAF6"
                     android:insetRight="0dp"
                     android:insetBottom="0dp"
                     android:text="Eventos" />
@@ -61,16 +63,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="#F1F0F0"    >
+                app:layout_constraintTop_toTopOf="parent">
 
                 <Button
                     android:id="@+id/filtros"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
-                    android:backgroundTint="#F1F0F0"
                     android:drawableLeft="@drawable/filtro"
-                    android:drawableTint="@color/black"
+                    android:drawableTint="#F0EBE3"
+                    android:backgroundTint="#304FFE"
                     android:insetTop="0dp"
                     android:insetBottom="0dp" />
                 <androidx.recyclerview.widget.RecyclerView
@@ -83,6 +84,18 @@
                     android:orientation="horizontal"
                     android:layout_gravity="center_vertical"
                     />
+                <Button
+                    android:id="@+id/addEvent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/add"
+                    android:drawableTint="#F0EBE3"
+                    android:insetTop="0dp"
+                    android:text="Event"
+                    android:backgroundTint="#304FFE"
+                    android:insetBottom="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="15dp"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -108,31 +121,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
-                style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#304FFE"
+                app:itemIconTint="#E8EAF6"
+                app:itemTextColor="#E8EAF6"
                 app:menu="@menu/navigation_menu" />
 
         </RelativeLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_View"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        />
-
-
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

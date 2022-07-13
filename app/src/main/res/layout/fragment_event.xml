@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Activities.EventFragment">
+    tools:context=".Activities.View.EventosMain.fragments.EventFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ReciclerEventoFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/backgroundlogin"
+        />
 
 </FrameLayout>
