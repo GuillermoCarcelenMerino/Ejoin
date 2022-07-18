@@ -150,6 +150,7 @@ class Perfil : AppCompatActivity() {
                     true
                 }
                 R.id.chat -> {
+                    if(usuario.email!=userPreferences.getString(Constants.EMAIL))
                     startActivity(Intent(this, ChatActivity::class.java))
                     true
                 }

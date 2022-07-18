@@ -55,19 +55,22 @@ class ChatListfragment : Fragment() {
         })
 
         viewModel.chats.observe(this, Observer {
-            chats= it as ArrayList<Chat>
+            chats = it as ArrayList<Chat>
             var users = arrayListOf<String>()
-           for (chat in it )
-           {
-               if(!chat.evento){
-                   for (user in chat.users)
-                   {
-                       if(user!=usuario)
-                           users.add(user)
-                   }
-               }
-           }
-            viewModel.getUsuariosFiltrados(users)
+            for (chat in it) {
+                if (!chat.evento) {
+                    for (user in chat.users) {
+                        if (user != usuario)
+                            users.add(user)
+                    }
+                }
+            }
+            if (users.size != 0)
+                viewModel.getUsuariosFiltrados(users)
+            else {
+                adapter = RecyclerChatLista(arrayListOf(), chats, this)
+                recyclerView.adapter = adapter
+            }
         })
 
         viewModel.usuariosFiltrados.observe(this, Observer {
@@ -98,8 +101,11 @@ class ChatListfragment : Fragment() {
         if(text!=""){
             var chatsFilt = chats.filter {
                     x-> x.nombre.uppercase().contains(text.toString().uppercase()) }
-            adapter = RecyclerChatLista(usuariosFilt,chatsFilt as ArrayList<Chat>  ,this)
-            recyclerView.adapter = adapter
+            if(chatsFilt.size!=0){
+                adapter = RecyclerChatLista(usuariosFilt,chatsFilt as ArrayList<Chat>  ,this)
+                recyclerView.adapter = adapter
+            }
+
         }
         else{
             adapter = RecyclerChatLista(usuariosFilt  ,chats  ,this)

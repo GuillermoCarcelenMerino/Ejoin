@@ -22,6 +22,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.mikhaellopez.circularimageview.CircularImageView
+import utilities.Constants
 import utilities.PreferencesManager
 import java.io.FileNotFoundException
 
@@ -34,7 +35,6 @@ class Register : AppCompatActivity() {
     private lateinit var userPreferences: PreferencesManager
     private lateinit var imagenButton: CircularImageView
     private var fotoSel: Boolean = false
-    private val db = Firebase.firestore
     private lateinit var usuario: Usuario
     private var canBeSaved: Boolean = true
     private lateinit var checkBox : CheckBox
@@ -59,6 +59,7 @@ class Register : AppCompatActivity() {
         setContentView(R.layout.activity_register)
         auth = Firebase.auth
         asignarObjetos()
+        userPreferences = PreferencesManager(this)
         findViewById<Button>(R.id.confirmRegister).setOnClickListener {
             checkuserName()
         }
@@ -78,6 +79,10 @@ class Register : AppCompatActivity() {
             if(it) {
                 findViewById<TextView>(R.id.nombreRegisterTextView).setTextColor(Color.RED)
                 canBeSaved = false
+                userPreferences.putBoolean(Constants.ESEMPRESA,checkBox.isChecked)
+                userPreferences.putString(Constants.NOMBREUSUARIO, usuario.name)
+                userPreferences.putString(Constants.EMAIL,usuario.email)
+                userPreferences.putString(Constants.Contraseña,password.text.toString())
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
